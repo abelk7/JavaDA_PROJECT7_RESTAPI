@@ -1,12 +1,16 @@
-package com.nnk.springboot.repositories;
+package com.nnk.springboot.services;
 
 import com.nnk.springboot.domain.User;
+import com.nnk.springboot.repositories.UserRepository;
+import com.nnk.springboot.services.impl.UserService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.platform.runner.JUnitPlatform;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
@@ -19,12 +23,15 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class UserRepositoryTest {
+@RunWith(JUnitPlatform.class)
+public class UserServiceTest {
+    private IUserService userService;
     @Mock
     private UserRepository userRepository;
 
+    @BeforeEach
     public void setup() {
-        userRepository = Mockito.mock(UserRepository.class);
+        userService = new UserService(userRepository);
     }
 
     @DisplayName(value = "1°) Recherche de tous les User")
@@ -45,7 +52,7 @@ public class UserRepositoryTest {
 
         when(userRepository.findAll()).thenReturn(userList);
 
-        List<User> result = userRepository.findAll();
+        List<User> result = userService.findAll();
 
         assertThat(result).isNotNull();
         assertThat(result).isNotEmpty();
@@ -65,11 +72,10 @@ public class UserRepositoryTest {
 
         when(userRepository.findById(anyInt())).thenReturn(Optional.of(user));
 
-        Optional<User> userResult = userRepository.findById(user.getId());
+        User userResult = userService.findById(user.getId());
 
         assertThat(userResult).isNotNull();
-        assertThat(userResult).isPresent();
-        assertThat(userResult.get().getId()).isEqualTo(user.getId());
+        assertThat(userResult.getId()).isEqualTo(user.getId());
     }
 
     @DisplayName(value = "3°) Mise à jour d'un User Existant")
@@ -92,7 +98,7 @@ public class UserRepositoryTest {
 
         when(userRepository.save(any(User.class))).thenReturn(userUpdated);
 
-        User userResult = userRepository.save(user);
+        User userResult = userService.save(user);
 
         assertThat(userResult).isNotNull();
         assertThat(userResult.getId()).isEqualTo(userUpdated.getId());
@@ -113,6 +119,10 @@ public class UserRepositoryTest {
         user.setFullname("fullnameTest");
         user.setRole("role");
 
-        userRepository.deleteById(user.getId());
+        when(userRepository.findById(anyInt())).thenReturn(Optional.of(user));
+
+        boolean result = userService.deleteById(user.getId());
+
+        assertThat(result).isTrue();
     }
 }

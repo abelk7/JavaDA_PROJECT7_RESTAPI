@@ -1,13 +1,16 @@
-package com.nnk.springboot.repositories;
+package com.nnk.springboot.services;
 
 import com.nnk.springboot.domain.RuleName;
+import com.nnk.springboot.repositories.RuleNameRepository;
+import com.nnk.springboot.services.impl.RuleNameService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.platform.runner.JUnitPlatform;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
@@ -20,13 +23,15 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class RuleNameRepositoryTest {
+@RunWith(JUnitPlatform.class)
+public class RuleNameServiceTest {
+    private IRuleNameService ruleNameService;
     @Mock
     private RuleNameRepository ruleNameRepository;
 
     @BeforeEach
     public void setup() {
-        ruleNameRepository = Mockito.mock(RuleNameRepository.class);
+        ruleNameService = new RuleNameService(ruleNameRepository);
     }
 
     @DisplayName(value = "1°) Recherche de tous les RuleName")
@@ -45,7 +50,7 @@ public class RuleNameRepositoryTest {
 
         when(ruleNameRepository.findAll()).thenReturn(ruleNameList);
 
-        List<RuleName> result = ruleNameRepository.findAll();
+        List<RuleName> result = ruleNameService.findAll();
 
         assertThat(result).isNotNull();
         assertThat(result).isNotEmpty();
@@ -67,11 +72,10 @@ public class RuleNameRepositoryTest {
 
         when(ruleNameRepository.findById(anyInt())).thenReturn(Optional.of(ruleName));
 
-        Optional<RuleName> ruleNameResult = ruleNameRepository.findById(ruleName.getId());
+        RuleName ruleNameResult = ruleNameService.findById(ruleName.getId());
 
         assertThat(ruleNameResult).isNotNull();
-        assertThat(ruleNameResult).isPresent();
-        assertThat(ruleNameResult.get().getId()).isEqualTo(ruleName.getId());
+        assertThat(ruleNameResult.getId()).isEqualTo(ruleName.getId());
     }
 
     @DisplayName(value = "3°) Mise à jour d'un RuleName Existant")
@@ -98,7 +102,7 @@ public class RuleNameRepositoryTest {
 
         when(ruleNameRepository.save(any(RuleName.class))).thenReturn(ruleNameUpdated);
 
-        RuleName ruleNameResult = ruleNameRepository.save(ruleName);
+        RuleName ruleNameResult = ruleNameService.save(ruleName);
 
         assertThat(ruleNameResult).isNotNull();
         assertThat(ruleNameResult.getId()).isEqualTo(ruleNameUpdated.getId());
@@ -123,6 +127,10 @@ public class RuleNameRepositoryTest {
         ruleName.setSqlStr("sqlStrTest");
         ruleName.setSqlPart("sqlPartTest");
 
-        ruleNameRepository.deleteById(ruleName.getId());
+        when(ruleNameRepository.findById(anyInt())).thenReturn(Optional.of(ruleName));
+
+        boolean result = ruleNameService.deleteById(ruleName.getId());
+
+        assertThat(result).isTrue();
     }
 }

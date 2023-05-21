@@ -1,13 +1,16 @@
-package com.nnk.springboot.repositories;
+package com.nnk.springboot.services;
 
 import com.nnk.springboot.domain.CurvePoint;
+import com.nnk.springboot.repositories.CurvePointRepository;
+import com.nnk.springboot.services.impl.CurvePointService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.platform.runner.JUnitPlatform;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.text.DateFormat;
@@ -25,13 +28,15 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class CurvePointRepositoryTest {
+@RunWith(JUnitPlatform.class)
+public class CurvePointServiceTest {
+    private ICurvePointService curvePointService;
     @Mock
     private CurvePointRepository curvePointRepository;
 
     @BeforeEach
     public void setup() {
-        curvePointRepository = Mockito.mock(CurvePointRepository.class);
+        curvePointService = new CurvePointService(curvePointRepository);
     }
 
     @DisplayName(value = "1°) Recherche de tous les CurvePoints")
@@ -54,7 +59,7 @@ public class CurvePointRepositoryTest {
 
         when(curvePointRepository.findAll()).thenReturn(curvePointList);
 
-        List<CurvePoint> result = curvePointRepository.findAll();
+        List<CurvePoint> result = curvePointService.findAll();
 
         assertThat(result).isNotNull();
         assertThat(result).isNotEmpty();
@@ -71,18 +76,17 @@ public class CurvePointRepositoryTest {
         CurvePoint curvePoint = new CurvePoint();
         curvePoint.setId(1);
         curvePoint.setCurveId(1);
-        curvePoint.setAsOfDate(LocalDateTime.now());
+        curvePoint.setAsOfDate(LocalDateTime.of(2023,7,15,8,00));
         curvePoint.setTerm(1.0);
         curvePoint.setValue(5.2);
-        curvePoint.setCreationDate(LocalDateTime.now());
+        curvePoint.setCreationDate(LocalDateTime.of(2023,7,15,8,00));
 
         when(curvePointRepository.findById(anyInt())).thenReturn(Optional.of(curvePoint));
 
-        Optional<CurvePoint> curvePointResult = curvePointRepository.findById(curvePoint.getId());
+        CurvePoint curvePointResult = curvePointService.findById(curvePoint.getId());
 
         assertThat(curvePointResult).isNotNull();
-        assertThat(curvePointResult).isPresent();
-        assertThat(curvePointResult.get().getId()).isEqualTo(curvePoint.getId());
+        assertThat(curvePointResult.getId()).isEqualTo(curvePoint.getId());
     }
 
     @DisplayName(value = "3°) Mise à jour d'un CurvePoint Existant")
@@ -110,7 +114,7 @@ public class CurvePointRepositoryTest {
 
         when(curvePointRepository.save(any(CurvePoint.class))).thenReturn(curvePointUdate);
 
-        CurvePoint curvePointResult = curvePointRepository.save(curvePoint);
+        CurvePoint curvePointResult = curvePointService.save(curvePoint);
 
         assertThat(curvePointResult).isNotNull();
         assertThat(curvePointResult.getId()).isEqualTo(curvePointUdate.getId());
@@ -133,6 +137,10 @@ public class CurvePointRepositoryTest {
         curvePoint.setValue(15.50);
         curvePoint.setCreationDate(LocalDateTime.now());
 
-        curvePointRepository.deleteById(curvePoint.getId());
+        when(curvePointRepository.findById(anyInt())).thenReturn(Optional.of(curvePoint));
+
+        boolean result = curvePointService.deleteById(curvePoint.getId());
+
+        assertThat(result).isTrue();
     }
 }

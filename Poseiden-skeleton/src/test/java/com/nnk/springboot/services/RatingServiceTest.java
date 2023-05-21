@@ -1,13 +1,16 @@
-package com.nnk.springboot.repositories;
+package com.nnk.springboot.services;
 
 import com.nnk.springboot.domain.Rating;
+import com.nnk.springboot.repositories.RatingRepository;
+import com.nnk.springboot.services.impl.RatingService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.platform.runner.JUnitPlatform;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
@@ -20,13 +23,15 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class RatingRepositoryTest {
+@RunWith(JUnitPlatform.class)
+public class RatingServiceTest {
+    private IRatingService ratingService;
     @Mock
     private RatingRepository ratingRepository;
 
     @BeforeEach
     public void setup() {
-        ratingRepository = Mockito.mock(RatingRepository.class);
+        ratingService = new RatingService(ratingRepository);
     }
 
     @DisplayName(value = "1°) Recherche de tous les Ratings")
@@ -47,7 +52,7 @@ public class RatingRepositoryTest {
 
         when(ratingRepository.findAll()).thenReturn(ratingList);
 
-        List<Rating> result = ratingRepository.findAll();
+        List<Rating> result = ratingService.findAll();
 
         assertThat(result).isNotNull();
         assertThat(result).isNotEmpty();
@@ -67,11 +72,10 @@ public class RatingRepositoryTest {
 
         when(ratingRepository.findById(anyInt())).thenReturn(Optional.of(rating));
 
-        Optional<Rating> ratingResult = ratingRepository.findById(rating.getId());
+        Rating ratingResult = ratingService.findById(rating.getId());
 
         assertThat(ratingResult).isNotNull();
-        assertThat(ratingResult).isPresent();
-        assertThat(ratingResult.get().getId()).isEqualTo(rating.getId());
+        assertThat(ratingResult.getId()).isEqualTo(rating.getId());
     }
 
     @DisplayName(value = "3°) Mise à jour d'un Rating Existant")
@@ -94,7 +98,7 @@ public class RatingRepositoryTest {
 
         when(ratingRepository.save(any(Rating.class))).thenReturn(ratingUpdated);
 
-        Rating ratingResult = ratingRepository.save(rating);
+        Rating ratingResult = ratingService.save(rating);
 
         assertThat(ratingResult).isNotNull();
         assertThat(ratingResult.getId()).isEqualTo(ratingUpdated.getId());
@@ -115,6 +119,10 @@ public class RatingRepositoryTest {
         rating.setFitchRating("fitchTest");
         rating.setOrderNumber(1);
 
-        ratingRepository.deleteById(rating.getId());
+        when(ratingRepository.findById(anyInt())).thenReturn(Optional.of(rating));
+
+        boolean result = ratingService.deleteById(rating.getId());
+
+        assertThat(result).isTrue();
     }
 }
