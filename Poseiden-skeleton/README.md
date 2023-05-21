@@ -7,25 +7,24 @@
 4. Bootstrap v.4.3.1
 
 
-## Setup with Intellij IDE
-1. Create project from Initializr: File > New > project > Spring Initializr
-2. Add lib repository into pom.xml
-3. Add folders
-    - Source root: src/main/java
-    - View: src/main/resources
-    - Static: src/main/resource/static
-4. Create database with name "demo" as configuration in application.properties
-5. Run sql script to create table doc/data.sql
+## Configuration
+database name : demo
+* username : root
+* password : root
 
-## Implement a Feature
-1. Create mapping domain class and place in package com.nnk.springboot.domain
-2. Create repository class and place in package com.nnk.springboot.repositories
-3. Create controller class and place in package com.nnk.springboot.controllers
-4. Create view files and place in src/main/resource/templates
+### Generated to database :
+* Shéma SQL in : src/main/resources/schema.sql
+* Data SQL in  : src/main/resources/data.sql
 
-## Write Unit Test
-1. Create unit test and place in package com.nnk.springboot in folder test > java
+App start on port : 8080 (http://localhost:8080/)
 
-## Security
-1. Create user service to load user from  database and place in package com.nnk.springboot.services
-2. Add configuration class and place in package com.nnk.springboot.config
+Account generated : 
+1. (role USER) username : abel  password : 123456789
+2. (role USER) username : test  password : 123456789
+
+## Jacoco UT
+![image](https://github.com/abelk7/JavaDA_PROJECT7_RESTAPI/assets/59890062/6d3ca198-4a0d-4e8b-9a34-d94608c02336)
+
+## Jacoco IT
+![image](https://github.com/abelk7/JavaDA_PROJECT7_RESTAPI/assets/59890062/d9f1529d-7399-4257-86eb-60ae7688c0a5)
+
