@@ -1,25 +1,28 @@
 package com.nnk.springboot.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import java.sql.Timestamp;
+import javax.validation.constraints.NotEmpty;
 
 @Entity
 @Table(name = "rating")
-@Data
 @NoArgsConstructor
-@AllArgsConstructor
+@Getter
+@Setter
 public class Rating {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @NotEmpty
+    @Column(name = "moodys_rating")
     private String moodysRating;
-    private String sandPRating;
+    @Column(name = "sandp_rating")
+    private String sandpRating;
+    @Column(name = "fitch_rating")
     private String fitchRating;
+    @Column(name = "order_number")
     private Integer orderNumber;
 }

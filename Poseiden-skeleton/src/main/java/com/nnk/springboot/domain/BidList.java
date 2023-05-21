@@ -1,23 +1,22 @@
 package com.nnk.springboot.domain;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Required;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import javax.validation.constraints.Digits;
-import javax.validation.constraints.NotBlank;
-import java.sql.Date;
-import java.sql.Timestamp;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "bidlist")
-@Data
+@Getter
+@Setter
 public class BidList {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
-    private Integer BidListId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer bidListId;
     private String account;
     private String type;
     private Double bidQuantity;
@@ -25,16 +24,22 @@ public class BidList {
     private Double bid;
     private Double ask;
     private String benchmark;
-    private Timestamp bidListDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+    private LocalDateTime bidListDate;
     private String commentary;
     private String security;
     private String status;
     private String trader;
     private String book;
+    @NotNull
+    @NotEmpty
     private String creationName;
-    private Timestamp creationDate;
+    @NotNull
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+    private LocalDateTime creationDate;
     private String revisionName;
-    private Timestamp revisionDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+    private LocalDateTime revisionDate;
     private String dealName;
     private String dealType;
     private String sourceListId;
