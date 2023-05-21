@@ -1,13 +1,16 @@
-package com.nnk.springboot.repositories;
+package com.nnk.springboot.services;
 
 import com.nnk.springboot.domain.Trade;
+import com.nnk.springboot.repositories.TradeRepository;
+import com.nnk.springboot.services.impl.TradeService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.platform.runner.JUnitPlatform;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
@@ -21,13 +24,15 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class TradeRepositoryTest {
+@RunWith(JUnitPlatform.class)
+public class TradeServiceTest {
+    private ITradeService tradeService;
     @Mock
     private TradeRepository tradeRepository;
 
     @BeforeEach
     public void setup() {
-        tradeRepository = Mockito.mock(TradeRepository.class);
+        tradeService = new TradeService(tradeRepository);
     }
 
     @DisplayName(value = "1°) Recherche de tous les Trade")
@@ -50,7 +55,7 @@ public class TradeRepositoryTest {
 
         when(tradeRepository.findAll()).thenReturn(tradeList);
 
-        List<Trade> result = tradeRepository.findAll();
+        List<Trade> result = tradeService.findAll();
 
         assertThat(result).isNotNull();
         assertThat(result).isNotEmpty();
@@ -86,11 +91,10 @@ public class TradeRepositoryTest {
 
         when(tradeRepository.findById(anyInt())).thenReturn(Optional.of(trade));
 
-        Optional<Trade> tradeResult = tradeRepository.findById(trade.getTradeId());
+        Trade tradeResult = tradeService.findById(trade.getTradeId());
 
         assertThat(tradeResult).isNotNull();
-        assertThat(tradeResult).isPresent();
-        assertThat(tradeResult.get().getTradeId()).isEqualTo(trade.getTradeId());
+        assertThat(tradeResult.getTradeId()).isEqualTo(trade.getTradeId());
     }
 
     @DisplayName(value = "3°) Mise à jour d'un Trade Existant")
@@ -145,7 +149,7 @@ public class TradeRepositoryTest {
 
         when(tradeRepository.save(any(Trade.class))).thenReturn(tradeUpdated);
 
-        Trade tradeResult = tradeRepository.save(trade);
+        Trade tradeResult = tradeService.save(trade);
 
         assertThat(tradeResult).isNotNull();
         assertThat(tradeResult.getTradeId()).isEqualTo(tradeUpdated.getTradeId());
@@ -198,6 +202,10 @@ public class TradeRepositoryTest {
         trade.setSourceListId("sourceListIdTest");
         trade.setSide("sideTest");
 
-        tradeRepository.deleteById(trade.getTradeId());
+        when(tradeRepository.findById(anyInt())).thenReturn(Optional.of(trade));
+
+        boolean result = tradeService.deleteById(trade.getTradeId());
+
+        assertThat(result).isTrue();
     }
 }

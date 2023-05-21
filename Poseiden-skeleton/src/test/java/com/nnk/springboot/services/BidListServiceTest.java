@@ -1,21 +1,21 @@
-package com.nnk.springboot.repositories;
+package com.nnk.springboot.services;
 
 import com.nnk.springboot.domain.BidList;
+import com.nnk.springboot.repositories.BidListRepository;
+import com.nnk.springboot.services.impl.BidListService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.platform.runner.JUnitPlatform;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,13 +25,15 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class BidListRepositoryTest {
+@RunWith(JUnitPlatform.class)
+public class BidListServiceTest {
+    private IBidListService bidListService;
     @Mock
     private BidListRepository bidListRepository;
 
     @BeforeEach
     public void setup() {
-        bidListRepository = Mockito.mock(BidListRepository.class);
+        bidListService = new BidListService(bidListRepository);
     }
 
     @DisplayName(value = "1°) Recherche de tous les BidLists")
@@ -49,7 +51,7 @@ public class BidListRepositoryTest {
 
         when(bidListRepository.findAll()).thenReturn(bidListList);
 
-        List<BidList> result = bidListRepository.findAll();
+        List<BidList> result = bidListService.findAll();
 
         assertThat(result).isNotNull();
         assertThat(result).isNotEmpty();
@@ -65,19 +67,18 @@ public class BidListRepositoryTest {
 
         when(bidListRepository.findById(anyInt())).thenReturn(Optional.of(bidList));
 
-        Optional<BidList> bidListResult = bidListRepository.findById(bidList.getBidListId());
+        BidList bidListResult = bidListService.findById(bidList.getBidListId());
 
         assertThat(bidListResult).isNotNull();
-        assertThat(bidListResult).isPresent();
-        assertThat(bidListResult.get().getBidListId()).isEqualTo(bidList.getBidListId());
+        assertThat(bidListResult.getBidListId()).isEqualTo(bidList.getBidListId());
     }
 
     @DisplayName(value = "3°) Mise à jour d'un BidList Existant")
     @Order(3)
     @Test
     void test_update_should_update_BidList() throws ParseException {
-        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        Date date = dateFormat.parse("02/09/2024");
+//        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+//        Date date = dateFormat.parse("02/09/2024");
 
         BidList bidList = new BidList();
         bidList.setBidListId(1);
@@ -112,16 +113,16 @@ public class BidListRepositoryTest {
         bidListUpdated.setAsk(200.00);
         bidListUpdated.setBenchmark("testSuccessBencjmarkUpdated");
         bidListUpdated.setAskQuantity(22.22);
-        bidListUpdated.setBidListDate(LocalDateTime.now());
+        bidListUpdated.setBidListDate(LocalDateTime.of(2024,9,02,16,30));
         bidListUpdated.setCommentary("testSuccessCommentaryUpdated");
         bidListUpdated.setSecurity("testSuccessSecurityUpdated");
         bidListUpdated.setStatus("testSuccessStatusUpdated");
         bidListUpdated.setTrader("testSuccessTradeUpdated");
         bidListUpdated.setBook("testSuccessBookUpdated");
         bidListUpdated.setCreationName("testSuccessCreationNameUpdated");
-        bidListUpdated.setCreationDate(LocalDateTime.now());
+        bidListUpdated.setCreationDate(LocalDateTime.of(2024,9,02,16,30));
         bidListUpdated.setRevisionName("testSuccessRrevisionNameUpdated");
-        bidListUpdated.setRevisionDate(LocalDateTime.now());
+        bidListUpdated.setRevisionDate(LocalDateTime.of(2024,9,02,16,30));
         bidListUpdated.setDealName("testSuccessDealNameUpdated");
         bidListUpdated.setDealType("testSuccessDealTypeUpdated");
         bidListUpdated.setSourceListId("testSuccessSourceListIdUpdated");
@@ -129,7 +130,7 @@ public class BidListRepositoryTest {
 
         when(bidListRepository.save(any(BidList.class))).thenReturn(bidListUpdated);
 
-        BidList bidListResult = bidListRepository.save(bidList);
+        BidList bidListResult = bidListService.save(bidList);
 
         assertThat(bidListResult).isNotNull();
         assertThat(bidListResult.getBidListId()).isEqualTo(bidListUpdated.getBidListId());
@@ -184,6 +185,11 @@ public class BidListRepositoryTest {
         bidList.setSourceListId("testSourceListId");
         bidList.setSide("testSide");
 
-        bidListRepository.deleteById(bidList.getBidListId());
+        when(bidListRepository.findById(anyInt())).thenReturn(Optional.of(bidList));
+
+        boolean result = bidListService.deleteById(bidList.getBidListId());
+
+        assertThat(result).isTrue();
     }
+
 }
