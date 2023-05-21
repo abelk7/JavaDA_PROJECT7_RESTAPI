@@ -1,55 +1,132 @@
 package com.nnk.springboot.controllers;
 
 import com.nnk.springboot.domain.BidList;
+import com.nnk.springboot.services.IBidListService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 @Controller
+@RequiredArgsConstructor
 public class BidListController {
-    // TODO: Inject Bid service
+    private final IBidListService bidListService;
+    private final ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+    private List<String> errorMessageList;
 
-    @RequestMapping("/bidList/list")
-    public String home(Model model)
-    {
-        // TODO: call service find all bids to show to the view
+    @GetMapping("/bidList/list")
+    @ResponseStatus(HttpStatus.OK)
+    public String home(Model model, HttpServletResponse httpServletResponse) {
+        model.addAttribute("bidList", bidListService.findAll());
+        if (model.containsAttribute("success")) {
+            return "bidList/list";
+        }
+        addModelAttributeBidlist(model, false, null, null);
         return "bidList/list";
     }
 
     @GetMapping("/bidList/add")
-    public String addBidForm(BidList bid) {
+    public String addBidForm(BidList bidList, Model model, HttpServletResponse httpServletResponse) {
+        if (model.containsAttribute("success") && model.getAttribute("success").equals(true) && model.containsAttribute("bidList")) {
+            httpServletResponse.setStatus(HttpServletResponse.SC_OK);
+            return home(model, httpServletResponse);
+        }
+        model.addAttribute("success", false);
+        model.addAttribute("bidList", bidList);
         return "bidList/add";
     }
 
-    @PostMapping("/bidList/validate")
-    public String validate(@Valid BidList bid, BindingResult result, Model model) {
-        // TODO: check data valid and save to db, after saving return bid list
-        return "bidList/add";
+    @PostMapping("/bidList/validate/")
+    public String validate(BidList bid, Model model, HttpServletResponse httpServletResponse) {
+        errorMessageList = new ArrayList<>();
+        Validator validator = factory.getValidator();
+
+        Set<ConstraintViolation<BidList>> violations = validator.validate(bid);
+
+        if (violations.isEmpty()) {
+            bidListService.save(bid);
+            addModelAttributeBidlist(model, true, "BidList crée avec succès", null);
+            httpServletResponse.setStatus(HttpServletResponse.SC_CREATED);
+            return home(model, httpServletResponse);
+        }
+
+        for (ConstraintViolation<BidList> violation : violations) {
+            errorMessageList.add(violation.getPropertyPath() + " " + violation.getMessage());
+        }
+
+        model.addAttribute("bid", bid);
+        addModelAttributeBidlist(model, false, null, errorMessageList);
+        httpServletResponse.setStatus(HttpServletResponse.SC_OK);
+        return addBidForm(bid, model, httpServletResponse);
     }
 
     @GetMapping("/bidList/update/{id}")
-    public String showUpdateForm(@PathVariable("id") Integer id, Model model) {
-        // TODO: get Bid by Id and to model then show to the form
-        return "bidList/update";
+    @ResponseStatus(HttpStatus.OK)
+    public String showUpdateForm(@PathVariable("id") Integer id, Model model, HttpServletResponse httpServletResponse) {
+        BidList bidList = bidListService.findById(id);
+        if (bidList != null) {
+            model.addAttribute("bid", bidList);
+            model.addAttribute("success", true);
+            return "bidList/update";
+        }
+        addModelAttributeBidlist(model, false, "Aucun BidList n'a été trouvé avec l'id fourni", null);
+        httpServletResponse.setStatus(HttpServletResponse.SC_OK);
+        return home(model, httpServletResponse);
     }
 
     @PostMapping("/bidList/update/{id}")
-    public String updateBid(@PathVariable("id") Integer id, @Valid BidList bidList,
-                             BindingResult result, Model model) {
-        // TODO: check required fields, if valid call service to update Bid and return list Bid
-        return "redirect:/bidList/list";
+    @ResponseStatus(HttpStatus.OK)
+    public String updateBid(@PathVariable("id") Integer id, BidList bid, Model model, HttpServletResponse httpServletResponse) {
+        errorMessageList = new ArrayList<>();
+        Validator validator = factory.getValidator();
+        Set<ConstraintViolation<BidList>> violations = validator.validate(bid);
+
+        BidList bidList1 = bidListService.findById(id);
+
+        if (violations.isEmpty() && bidList1 != null) {
+            bidListService.save(bid);
+            addModelAttributeBidlist(model, true, "Bidlist mis à jour avec succès", null);
+            httpServletResponse.setStatus(HttpServletResponse.SC_OK);
+            return home(model, httpServletResponse);
+        }
+
+        for (ConstraintViolation<BidList> violation : violations) {
+            errorMessageList.add(violation.getPropertyPath() + " " + violation.getMessage());
+        }
+        model.addAttribute("bid", bid);
+        addModelAttributeBidlist(model, false, null, errorMessageList);
+        return "bidList/update";
     }
 
-    @GetMapping("/bidList/delete/{id}")
-    public String deleteBid(@PathVariable("id") Integer id, Model model) {
-        // TODO: Find Bid by Id and delete the bid, return to Bid list
-        return "redirect:/bidList/list";
+    @RequestMapping("/bidList/delete/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public String deleteBid(@PathVariable("id") Integer id, Model model, HttpServletResponse httpServletResponse) {
+        errorMessageList = new ArrayList<>();
+        boolean isBidListDeleted = bidListService.deleteById(id);
+        if (isBidListDeleted) {
+            addModelAttributeBidlist(model, true, "BidList avec id " + id + " à été supprimé", null);
+            return home(model, httpServletResponse);
+        }
+        errorMessageList.add("Une erreur est survenue lors de la suppression du Bidlist");
+        addModelAttributeBidlist(model, false, null, errorMessageList);
+        return home(model, httpServletResponse);
+    }
+
+    private void addModelAttributeBidlist(Model model, boolean success, String message, List<String> messageList) {
+        model.addAttribute("success", success);
+        model.addAttribute("message", message);
+        if (messageList != null && !messageList.isEmpty()) {
+            model.addAttribute("messageList", messageList);
+        }
     }
 }
