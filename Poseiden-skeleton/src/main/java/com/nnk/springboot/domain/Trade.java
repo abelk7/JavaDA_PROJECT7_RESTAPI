@@ -1,23 +1,26 @@
 package com.nnk.springboot.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import java.sql.Timestamp;
-
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "trade")
-@Data
 @NoArgsConstructor
-@AllArgsConstructor
+@Getter
+@Setter
 public class Trade {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer tradeId;
+    @NotNull
+    @NotEmpty
     private String account;
     private String type;
     private Double buyQuantity;
@@ -25,15 +28,18 @@ public class Trade {
     private Double buyPrice;
     private Double sellPrice;
     private String benchmark;
-    private Timestamp tradeDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+    private LocalDateTime tradeDate;
     private String security;
     private String status;
     private String trader;
     private String book;
     private String creationName;
-    private Timestamp creationDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+    private LocalDateTime creationDate;
     private String revisionName;
-    private Timestamp revisionDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+    private LocalDateTime revisionDate;
     private String dealName;
     private String dealType;
     private String sourceListId;
