@@ -1,27 +1,80 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-	  xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org">
 <head>
-	<meta charset="utf-8"/>
-	<title>Home</title>
-	<link rel="stylesheet" href="../../css/bootstrap.min.css" >
+    <meta charset="utf-8"/>
+    <title>Home</title>
+    <link href="../../css/bootstrap.min.css" rel="stylesheet">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
 </head>
 <body>
 <div class="container">
 
-	<div class="row">
-		<h2>Update New Rule</h2>
-	</div>
+    <div class="row justify-content-center">
+        <h2 class="mt-5">Update New Rule</h2>
+    </div>
 
-	<div class="row">
-		<form action="#" th:action="@{/ruleName/update/{id}(id=${ruleName.id})}" th:object="${ruleName}" method="post" class="form-horizontal" style="width: 100%">
-			<!--
-			TODO: Create a form to edit the values of RuleName, there are 2 buttons: Update data and Cancel to the RuleName
-			 -->
+    <div id="success-alert" th:if="${success != null}">
+        <div class="alert alert-success d-flex align-items-center mt-3" role="alert" th:if="${success eq true}">
+            <p th:text="${message}"></p>
+        </div>
+        <div class="alert alert-danger  mt-3" role="alert" th:if="${success eq false}">
+            <p>Les champs suivant sont incorrect : </p>
+            <ul th:each="m: ${messageList}">
+                <li th:text="${m}"></li>
+            </ul>
+        </div>
+    </div>
 
-		</form>
-	</div>
-
+    <div class="row justify-content-center py-5">
+        <form action="#" class="form-horizontal border p-5 my-2" method="post" style="width: 100%"
+              th:action="@{/ruleName/update/{id}(id=${ruleName.id})}" th:object="${ruleName}">
+            <input class="form-control" id="inputBidListId" th:field="*{id}" th:hidden="true" th:value="${id}"
+                   type="text">
+            <!-- Name -->
+            <div class="mb-3">
+                <label class="form-label" for="inputName">Name</label>
+                <input class="form-control" id="inputName" th:field="*{name}" type="text">
+            </div>
+            <!-- Description -->
+            <div class="mb-3">
+                <label class="form-label" for="inputDescription">Description</label>
+                <input class="form-control" id="inputDescription" th:field="*{description}" type="text">
+            </div>
+            <!-- Json -->
+            <div class="mb-3">
+                <label class="form-label" for="inputJson">Json</label>
+                <input class="form-control" id="inputJson" th:field="*{json}" type="text">
+            </div>
+            <!-- Template -->
+            <div class="mb-3">
+                <label class="form-label" for="inputTemplate">Template</label>
+                <input class="form-control" id="inputTemplate" th:field="*{template}" type="text">
+            </div>
+            <!-- SqlStr -->
+            <div class="mb-3">
+                <label class="form-label" for="inputSqlStr">SqlStr</label>
+                <input class="form-control" id="inputSqlStr" th:field="*{sqlStr}" type="text">
+            </div>
+            <!-- SqlPart -->
+            <div class="mb-3">
+                <label class="form-label" for="inputSqlPart">SqlPart</label>
+                <input class="form-control" id="inputSqlPart" th:field="*{sqlPart}" type="text">
+            </div>
+            <div class="mb-3 d-flex justify-content-center mt-5">
+                <a class="btn btn-danger mr-2" href="#" role="button" style="width: 100px;" th:href="@{/ruleName/list}">Cancel</a>
+                <input class="btn btn-primary" style="width: 130px;" type="submit" value="Update RuleName">
+            </div>
+        </form>
+    </div>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script crossorigin="anonymous"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script>
+    $("#success-alert").fadeToggle(10000);
+    $("#error-alert").fadeToggle(10000);
+</script>
 </body>
 </html>

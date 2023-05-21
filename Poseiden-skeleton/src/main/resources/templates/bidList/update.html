@@ -1,25 +1,152 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" 
-	  xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="utf-8"/>
-<title>Home</title>
-<link rel="stylesheet" href="../../css/bootstrap.min.css" >
+    <meta charset="utf-8"/>
+    <title>Home</title>
+    <link href="../../css/bootstrap.min.css" rel="stylesheet">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
 </head>
 <body>
 <div class="container">
-	<div class="row">
-		<h2>Update Bid</h2>
-	</div>
 
-	<div class="row">
-		<form action="#" th:action="@{/bidList/update/{id}(id=${bidList.bidListId})}" th:object="${bidList}" method="post" class="form-horizontal" style="width: 100%">
-			<!--
-			TODO: Create a form to edit the values of Bid, there are 2 buttons: Update data and Cancel to the list Bid
-			 -->
-		</form>
-	</div>
+    <div class="row justify-content-center">
+        <h2 class="mt-5">Update Bid</h2>
+    </div>
 
+    <div id="success-alert" th:if="${success != null}">
+        <div class="alert alert-danger  mt-3" role="alert" th:if="${success eq false}">
+            <p>Les champs suivant sont incorrect : </p>
+            <ul th:each="m: ${messageList}">
+                <li th:text="${m}"></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="row justify-content-center py-5">
+        <form action="#" class="form-horizontal border p-5 my-2" method="post" style="width: 100%"
+              th:action="@{/bidList/update/{id}(id=${bid.getBidListId()})}" th:object="${bid}">
+            <input class="form-control" id="inputBidListId" th:field="*{bidListId}" th:hidden="true" th:value="${id}"
+                   type="text">
+            <!-- Account -->
+            <div class="mb-3">
+                <label class="form-label" for="inputAccount">Account</label>
+                <input class="form-control" id="inputAccount" th:field="*{account}" type="text">
+            </div>
+            <!-- Type -->
+            <div class="mb-3">
+                <label class="form-label" for="inputType">Type</label>
+                <input class="form-control" id="inputType" th:field="*{type}" type="text">
+            </div>
+            <!-- BidQuantity -->
+            <div class="mb-3">
+                <label class="form-label" for="inputBidQuantity">Bid Quantity</label>
+                <input class="form-control" id="inputBidQuantity" step="0.01" th:field="*{bidQuantity}" type="number">
+            </div>
+            <!-- askQuantity -->
+            <div class="mb-3">
+                <label class="form-label" for="inputAskQuantity">Ask Quantity</label>
+                <input class="form-control" id="inputAskQuantity" step="0.01" th:field="*{askQuantity}" type="number">
+            </div>
+            <!-- bid -->
+            <div class="mb-3">
+                <label class="form-label" for="inputBid">Bid</label>
+                <input class="form-control" id="inputBid" step="0.01" th:field="*{bid}" type="number">
+            </div>
+            <!-- ask -->
+            <div class="mb-3">
+                <label class="form-label" for="inputAsk">Ask</label>
+                <input class="form-control" id="inputAsk" step="0.01" th:field="*{ask}" type="number">
+            </div>
+            <!-- benchmark -->
+            <div class="mb-3">
+                <label class="form-label" for="inputBenchmark">Benchmark</label>
+                <input class="form-control" id="inputBenchmark" th:field="*{benchmark}" type="text">
+            </div>
+            <!-- bidListDate -->
+            <div class="mb-3">
+                <label class="form-label" for="inputBidListDate">BidList Date</label>
+                <input class="form-control" id="inputBidListDate" th:field="*{bidListDate}" type="datetime-local">
+            </div>
+            <!-- commentary -->
+            <div class="mb-3">
+                <label class="form-label" for="inputCommentary">Commentary</label>
+                <input class="form-control" id="inputCommentary" th:field="*{commentary}" type="text">
+            </div>
+            <!-- security -->
+            <div class="mb-3">
+                <label class="form-label" for="inputSecurity">Security</label>
+                <input class="form-control" id="inputSecurity" th:field="*{security}" type="text">
+            </div>
+            <!-- status -->
+            <div class="mb-3">
+                <label class="form-label" for="inputStatus">Status</label>
+                <input class="form-control" id="inputStatus" th:field="*{status}" type="text">
+            </div>
+            <!-- trader -->
+            <div class="mb-3">
+                <label class="form-label" for="inputTrader">Trader</label>
+                <input class="form-control" id="inputTrader" th:field="*{trader}" type="text">
+            </div>
+            <!-- book -->
+            <div class="mb-3">
+                <label class="form-label" for="inputBook">Book</label>
+                <input class="form-control" id="inputBook" th:field="*{book}" type="text">
+            </div>
+            <!-- creationName -->
+            <div class="mb-3">
+                <label class="form-label" for="inputCreationName">Creation Name</label>
+                <input class="form-control" id="inputCreationName" th:field="*{creationName}" type="text">
+            </div>
+            <!-- creationDate -->
+            <div class="mb-3">
+                <label class="form-label" for="inputCreationDate">creation Date</label>
+                <input class="form-control" id="inputCreationDate" th:field="*{creationDate}" type="datetime-local">
+            </div>
+            <!-- revisionName -->
+            <div class="mb-3">
+                <label class="form-label" for="inputRevisionName">Revision Name</label>
+                <input class="form-control" id="inputRevisionName" th:field="*{revisionName}" type="text">
+            </div>
+            <!-- revisionDate -->
+            <div class="mb-3">
+                <label class="form-label" for="inputRevisionDate">Revision Date</label>
+                <input class="form-control" id="inputRevisionDate" th:field="*{revisionDate}" type="datetime-local">
+            </div>
+            <!-- dealName -->
+            <div class="mb-3">
+                <label class="form-label" for="inputDealName">dealName</label>
+                <input class="form-control" id="inputDealName" th:field="*{dealName}" type="text">
+            </div>
+            <!-- dealType -->
+            <div class="mb-3">
+                <label class="form-label" for="inputDealType">Deal Type</label>
+                <input class="form-control" id="inputDealType" th:field="*{dealType}" type="text">
+            </div>
+            <!-- sourceListId -->
+            <div class="mb-3">
+                <label class="form-label" for="inputSourceListId">Source ListId</label>
+                <input class="form-control" id="inputSourceListId" th:field="*{sourceListId}" type="text">
+            </div>
+            <!-- side -->
+            <div class="mb-3">
+                <label class="form-label" for="inputSide">Side</label>
+                <input class="form-control" id="inputSide" th:field="*{side}" type="text">
+            </div>
+            <div class="mb-3 d-flex justify-content-center mt-5">
+                <a class="btn btn-danger mr-2" href="#" role="button" style="width: 100px;" th:href="@{/bidList/list}">Cancel</a>
+                <input class="btn btn-primary" style="width: 130px;" type="submit" value="Update BidList">
+            </div>
+        </form>
+    </div>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script crossorigin="anonymous"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script>
+    $("#success-alert").fadeToggle(10000);
+    $("#error-alert").fadeToggle(10000);
+</script>
 </body>
 </html>

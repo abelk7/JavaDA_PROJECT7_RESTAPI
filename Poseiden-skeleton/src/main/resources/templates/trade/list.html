@@ -1,46 +1,84 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" 
-	  xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="utf-8"/>
-<title>Home</title>
-<link rel="stylesheet" href="../../css/bootstrap.min.css" >
+    <meta charset="utf-8"/>
+    <title>Home</title>
+    <link href="../../css/bootstrap.min.css" rel="stylesheet">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
 </head>
 <body>
 <div class="container">
-	<div class="row">
-		<div class="col-6">
-			<a href="/bidList/list">Bid List</a>&nbsp;|&nbsp;
-			<a href="/curvePoint/list">Curve Points</a>&nbsp;|&nbsp;
-			<a href="/rating/list">Ratings</a>&nbsp;|&nbsp;
-			<a href="/trade/list">Trade</a>&nbsp;|&nbsp;
-			<a href="/ruleName/list">Rule</a>
-		</div>
-		<div class="col-6 text-right">
-			Logged in user: <b th:inline="text"  class="user"> [[${#httpServletRequest.remoteUser}]] </b>
-			<form th:action="@{/app-logout}" method="POST">
-				<input type="submit" value="Logout"/>
-			</form>
-		</div>
-	</div>
-	<div class="row"><h2>Trade List</h2></div>
-	<div class="row">
-		<a href="/trade/add" class="btn btn-primary btn-sm">Add New</a>
-		<table class="table table-bordered">
-			<thead>
-				<tr>
-					<th>Id</th>
-					<th>Account</th>
-					<th>Type</th>
-					<th>Buy Quantity</th>
-					<th>Action</th>
-				</tr>
-			</thead>
-			<tbody>
-			<!-- TODO: Show all Trade to the table, the Action column will have Edit & Delete buttons -->
-			</tbody>
-		</table>
-	</div>
+    <div class="row">
+        <div class="col-6">
+            <a href="/bidList/list">Bid List</a>&nbsp;|&nbsp;
+            <a href="/curvePoint/list">Curve Points</a>&nbsp;|&nbsp;
+            <a href="/rating/list">Ratings</a>&nbsp;|&nbsp;
+            <a href="/trade/list">Trade</a>&nbsp;|&nbsp;
+            <a href="/ruleName/list">Rule</a>
+        </div>
+        <div class="col-6 text-right">
+            Logged in user: <b class="user" th:inline="text"> [[${#httpServletRequest.remoteUser}]] </b>
+            <form method="POST" th:action="@{/app-logout}">
+                <input type="submit" value="Logout"/>
+            </form>
+        </div>
+    </div>
+
+    <div id="success-alert" th:if="${success}">
+        <div class="alert alert-success d-flex align-items-center mt-3" role="alert">
+            <p th:text="${message}"></p>
+        </div>
+    </div>
+    <div id="error-alert" th:if="${!success and message != null}">
+        <div class="alert alert-danger d-flex align-items-center mt-3" role="alert">
+            <p th:text="${message}"></p>
+        </div>
+    </div>
+
+    <div class="row"><h2>Trade List</h2></div>
+    <div class="row">
+        <a class="btn btn-primary btn-sm my-2" href="/trade/add">Add New</a>
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>Account</th>
+                <th>Type</th>
+                <th>Buy Quantity</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody th:each="trade : ${tradeList}">
+            <tr>
+                <td th:text="${trade.getTradeId()}"></td>
+                <td th:text="${trade.getAccount()}"></td>
+                <td th:text="${trade.getType()}"></td>
+                <td th:text="${trade.getBuyQuantity()}"></td>
+                <td style="width: 90px;">
+                    <div class="d-flex justify-content-center">
+                        <form action="#" class="form" method="get"
+                              style="display: inline; margin-right: 5px;" th:action="@{'/trade/update/'+${trade.getTradeId()}}">
+                            <button class="btn btn-primary" type="submit">Edit</button>
+                        </form>
+                        <form action="#" class="form" method="get"
+                              style="display: inline;" th:action="@{'/trade/delete/'+${trade.getTradeId()}}">
+                            <button class="btn btn-danger" type="submit">Delete</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script crossorigin="anonymous"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script>
+    $("#success-alert").fadeToggle(10000);
+    $("#error-alert").fadeToggle(10000);
+</script>
 </body>
 </html>
