@@ -1,61 +1,75 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-	  xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org">
 <head>
-	<meta charset="utf-8"/>
-	<title>Home</title>
-	<link rel="stylesheet" href="../../css/bootstrap.min.css" >
+    <meta charset="utf-8"/>
+    <title>Home</title>
+    <link href="../../css/bootstrap.min.css" rel="stylesheet">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
 </head>
 <body>
 <div class="container">
+    <div class="row justify-content-center">
+        <h2 class="mt-5">Update User</h2>
+    </div>
 
-	<div class="row">
-		<h2>Update User</h2>
-	</div>
-
-	<div class="row">
-		<form action="#" th:action="@{/user/update/{id}(id=${user.id})}" th:object="${user}" method="post" class="form-horizontal" style="width: 100%">
-			<div class="form-group">
-				<label for="fullname" class="col-sm-2 control-label">Full Name</label>
-				<div class="col-sm-10">
-					<input type="text" th:field="*{fullname}" id="fullname" placeholder="Full Name" class="col-4">
-					<p class="text-danger" th:if="${#fields.hasErrors('fullname')}" th:errors="*{fullname}"></p>
-				</div>
-			</div>
-			<div class="form-group">
-				<label for="username" class="col-sm-2 control-label">User Name</label>
-				<div class="col-sm-10">
-					<input type="text" th:field="*{username}" id="username" placeholder="User Name" class="col-4">
-					<p class="text-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></p>
-				</div>
-			</div>
-			<div class="form-group">
-				<label for="password" class="col-sm-2 control-label">Password</label>
-				<div class="col-sm-10">
-					<input type="password" th:field="*{password}" id="password" placeholder="Password" class="col-4">
-					<p class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
-				</div>
-			</div>
-			<div class="form-group">
-				<label for="password" class="col-sm-2 control-label">Role</label>
-				<div class="col-sm-10">
-					<label class="checkbox-inline"><input type="radio" th:field="*{role}" th:value="ADMIN">Admin</label>
-					<label class="checkbox-inline"><input type="radio" th:field="*{role}" th:value="USER">User</label>
-				</div>
-			</div>
+    <div id="success-alert" th:if="${success != null}">
+        <div class="alert alert-danger  mt-3" role="alert" th:if="${success eq false}">
+            <p>Les champs suivant sont incorrect : </p>
+            <ul th:each="m: ${messageList}">
+                <li th:text="${m}"></li>
+            </ul>
+        </div>
+    </div>
 
 
-			<div class="form-group">
-				<div class="col-sm-12">
-					<input type="hidden" th:field="*{id}">
-					<a class="btn btn-danger btn-sm" href="/user/list">Cancel</a>
-					<input class="btn btn-primary btn-sm" type="submit" value="Update User">
-				</div>
-			</div>
+    <div class="row justify-content-center py-5">
+        <form action="#" class="form-horizontal border p-5 my-2" method="post" style="width: 100%"
+              th:action="@{/user/update/{id}(id=${user.id})}" th:object="${user}">
+            <input class="form-control" id="inputUserId" th:field="*{id}" th:hidden="true" th:value="${id}" type="text">
+            <div class="mb-3">
+                <label class="form-label" for="inputFullName">Full Name</label>
+                <input class="form-control" id="inputFullName" th:field="*{fullname}" placeholder="Full Name"  type="text">
+            </div>
 
-		</form>
-	</div>
+            <div class="mb-3">
+                <label class="form-label" for="inputUserName">User Name</label>
+                <input class="form-control" id="inputUserName" th:field="*{username}" placeholder="User Name"  type="text">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" for="inputPassword">Password</label>
+                <input class="form-control" id="inputPassword" th:field="*{password}" placeholder="Password"  type="password">
+            </div>
+
+            <div class="mb-3">
+                <p>Role</p>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="inlineRadioAdmin" id="inlineRadioAdmin" th:field="*{role}" th:value="ADMIN">
+                    <label class="form-check-label" for="inlineRadioAdmin">Admin</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="inlineRadioUser" id="inlineRadioUser" th:field="*{role}" th:value="USER">
+                    <label class="form-check-label" for="inlineRadioUser">User</label>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <div class="col-sm-12">
+                    <input th:field="*{id}" type="hidden">
+                    <a class="btn btn-danger btn-sm" href="/user/list">Cancel</a>
+                    <input class="btn btn-primary btn-sm" type="submit" value="Update User">
+                </div>
+            </div>
+
+        </form>
+    </div>
 
 </div>
+<script>
+    $("#success-alert").fadeToggle(10000);
+    $("#error-alert").fadeToggle(10000);
+</script>
 </body>
 </html>

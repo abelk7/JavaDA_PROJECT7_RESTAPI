@@ -2,12 +2,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title> Spring Boot </title>
-    <link rel="stylesheet" href="/css/styles.css"/>
+    <link href="/css/styles.css" rel="stylesheet"/>
+    <link href="../../css/bootstrap.min.css" rel="stylesheet">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
 </head>
 <body>
-<h3> HOME PAGE </h3>
-<p>
-    <a href="/login">Login</a> or create one <a href="/user/list">User management</a>
-</p>
+
+<div class="col-sm-12 col-md-12 col-lg-12 mx-auto text-center" style="width: 60%;margin-top: 250px;">
+    <div class="card text-center" style="width: 100%;">
+        <div class="card-body">
+            <h5 class="card-title">HOME PAGE </h5>
+            <p>
+                <a class="btn btn-primary btn-sm" th:href="@{/login}">Login</a> or create one <a class="btn btn-primary btn-sm" th:href="@{/user/list}">User management</a>
+            </p>
+        </div>
+    </div>
+</div>
+
+
 </body>
 </html>

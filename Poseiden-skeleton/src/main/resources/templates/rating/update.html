@@ -1,26 +1,64 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-	  xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org">
 <head>
-	<meta charset="utf-8"/>
-	<title>Home</title>
-	<link rel="stylesheet" href="../../css/bootstrap.min.css" >
+    <meta charset="utf-8"/>
+    <title>Home</title>
+    <link href="../../css/bootstrap.min.css" rel="stylesheet">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
 </head>
 <body>
 <div class="container">
 
-	<div class="row">
-		<h2>Update Rating</h2>
-	</div>
+    <div class="row justify-content-center">
+        <h2 class="mt-5">Update Rating</h2>
+    </div>
 
-	<div class="row">
-		<form action="#" th:action="@{/rating/update/{id}(id=${rating.id})}" th:object="${rating}" method="post" class="form-horizontal" style="width: 100%">
-			<!--
-			TODO: Create a form to edit the values of Rating, there are 2 buttons: Update data and Cancel to the Rating
-			 -->
-		</form>
-	</div>
+    <div id="success-alert" th:if="${success != null}">
+        <div class="alert alert-danger  mt-3" role="alert" th:if="${success eq false}">
+            <p>Les champs suivant sont incorrect : </p>
+            <ul th:each="m: ${messageList}">
+                <li th:text="${m}"></li>
+            </ul>
+        </div>
+    </div>
 
+    <div class="row">
+        <form action="#" class="form-horizontal border p-5 my-2" method="post" style="width: 100%"
+              th:action="@{/rating/update/{id}}" th:object="${rating}">
+            <input class="form-control" id="inputRatingId" th:field="${rating.id}" th:hidden="true" th:value="${id}"
+                   type="text">
+            <!-- MoodysRating -->
+            <div class="mb-3">
+                <label class="form-label" for="inputMoodysRating">Moodys Rating</label>
+                <input class="form-control" id="inputMoodysRating" th:field="*{moodysRating}" type="text">
+            </div>
+            <!-- SandPRating -->
+            <div class="mb-3">
+                <label class="form-label" for="inputSandPRating">Sand PRating</label>
+                <input class="form-control" id="inputSandPRating" th:field="*{sandpRating}" type="text">
+            </div>
+            <!-- Fitch Rating -->
+            <div class="mb-3">
+                <label class="form-label" for="inputFitchRating">Fitch Rating</label>
+                <input class="form-control" id="inputFitchRating" th:field="*{fitchRating}" type="text">
+            </div>
+            <!-- Order Number -->
+            <div class="mb-3">
+                <label class="form-label" for="inputOrderNumber">Order Number</label>
+                <input class="form-control" id="inputOrderNumber" th:field="*{orderNumber}" type="number">
+            </div>
+
+            <div class="mb-3 d-flex justify-content-center mt-5">
+                <a class="btn btn-danger mr-2" href="#" role="button" style="width: 100px;" th:href="@{/rating/list}">Cancel</a>
+                <input class="btn btn-primary" style="width: 130px;" type="submit" value="Update Rating">
+            </div>
+        </form>
+    </div>
 </div>
+<script>
+    $("#success-alert").fadeToggle(10000);
+    $("#error-alert").fadeToggle(10000);
+</script>
 </body>
 </html>

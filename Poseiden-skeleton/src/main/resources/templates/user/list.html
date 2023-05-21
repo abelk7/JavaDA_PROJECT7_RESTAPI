@@ -1,48 +1,71 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" 
-	  xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="utf-8"/>
-<title>Home</title>
-<link rel="stylesheet" type="text/css" href="../../css/bootstrap.min.css">
+    <meta charset="utf-8"/>
+    <title>Home</title>
+    <link href="../../css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
 </head>
 <body>
 <div class="container">
-	<div class="row">
-		<div class="col-6">
+    <div class="row">
 
-		</div>
-		<div class="col-6 text-right">
-			<a href="/">Home</a>&nbsp;|&nbsp;<a href="/login">Login</a>
-		</div>
-	</div>
-	<div class="row"><h2>User List</h2></div>
-	<div class="row">
-		<a href="/user/add" class="btn btn-primary btn-sm">Add New</a>
-		<table class="table table-bordered">
-			<thead>
-				<tr>
-					<th>Id</th>
-					<th>Full Name</th>
-					<th>User Name</th>
-					<th>Role</th>
-					<th>Action</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr th:each="user : ${users}">
-					<td style="width: 10%" th:text="${user.id}"></td>
-					<td th:text="${user.fullname}"></td>
-					<td th:text="${user.username}"></td>
-					<td style="width: 25%" th:text="${user.role}"></td>
-					<td style="width: 15%" class="text-center">
-						<a th:href="@{/user/update/{id}(id=${user.id})}">Edit</a>&nbsp;|&nbsp;
-						<a th:href="@{/user/delete/{id}(id=${user.id})}">Delete</a>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-	</div>
+        <div id="success-alert" th:if="${success != null and success}">
+            <div class="alert alert-success d-flex align-items-center mt-3" role="alert">
+                <p th:text="${message}"></p>
+            </div>
+        </div>
+        <div id="error-alert" th:if="${success != null and !success and message != null or messageList != null}">
+            <div class="alert alert-danger d-flex align-items-center mt-3" role="alert">
+                <p th:text="${message}"></p>
+            </div>
+        </div>
+
+        <div class="col-6 text-right">
+            <a href="/">Home</a>&nbsp;|&nbsp;<a href="/login">Login</a>
+        </div>
+    </div>
+    <div class="row"><h2>User List</h2></div>
+    <div class="row">
+        <a class="btn btn-primary btn-sm my-2" href="/user/add">Add New</a>
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>Full Name</th>
+                <th>User Name</th>
+                <th>Role</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="user : ${users}">
+                <td style="width: 10%" th:text="${user.id}"></td>
+                <td th:text="${user.fullname}"></td>
+                <td th:text="${user.username}"></td>
+                <td style="width: 25%" th:text="${user.role}"></td>
+                <td style="width: 90px;">
+                    <div class="d-flex justify-content-center">
+                        <form action="#" class="form" method="get"
+                              style="display: inline; margin-right: 5px;" th:action="@{'/user/update/'+${user.id}}">
+                            <button class="btn btn-primary" type="submit">Edit</button>
+                        </form>
+                        <form action="#" class="form" method="post"
+                              style="display: inline;" th:action="@{'/user/delete/'+${user.id}}">
+                            <button class="btn btn-danger" type="submit">Delete</button>
+                        </form>
+                    </div>
+
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
+<script>
+    $("#success-alert").fadeToggle(10000);
+    $("#error-alert").fadeToggle(10000);
+</script>
 </body>
 </html>

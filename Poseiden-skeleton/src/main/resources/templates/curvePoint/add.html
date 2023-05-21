@@ -1,27 +1,73 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" 
-	  xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="utf-8"/>
-<title>Home</title>
-<link rel="stylesheet" href="../../css/bootstrap.min.css" >
+    <meta charset="utf-8"/>
+    <title>Home</title>
+    <link href="../../css/bootstrap.min.css" rel="stylesheet">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
 </head>
 <body>
 <div class="container">
 
-	<div class="row">
-		<h2>Add New Curve Point</h2>
-	</div>
+    <div class="row justify-content-center">
+        <h2 class="mt-5">Add New Curve Point</h2>
+    </div>
 
-	<div class="row">
-		<form action="#" th:action="@{/curvePoint/validate}" th:object="${curvePoint}" method="post" class="form-horizontal" style="width: 100%">
-			<!--
-			TODO: Create a form to input the values of CurvePoint, there are 2 buttons: Save data and Cancel to the list CurvePoint
-			 -->
+    <div id="success-alert" th:if="${success != null}">
+        <div class="alert alert-success d-flex align-items-center mt-3" role="alert" th:if="${success eq true}">
+            <p th:text="${message}"></p>
+        </div>
+        <div class="alert alert-danger  mt-3" role="alert" th:if="${success eq false && messageList != null}">
+            <p>Les champs suivant sont incorrect : </p>
+            <ul th:each="m: ${messageList}">
+                <li th:text="${m}"></li>
+            </ul>
+        </div>
+    </div>
 
-		</form>
-	</div>
+    <div class="row justify-content-center py-5">
+        <form action="#" class="form-horizontal border p-5 my-2" method="post" style="width: 100%"
+              th:action="@{/curvePoint/validate}" th:object="${curvePoint}">
+            <!-- CurveId -->
+            <div class="mb-3">
+                <label class="form-label" for="inputCurveId">Curve Id</label>
+                <input class="form-control" id="inputCurveId" th:field="${curvePoint.curveId}" type="number">
+            </div>
+            <!-- AsOfDate -->
+            <div class="mb-3">
+                <label class="form-label" for="inputAsOfDate">As Of Date</label>
+                <input class="form-control" id="inputAsOfDate" th:field="${curvePoint.asOfDate}" type="datetime-local">
+            </div>
+            <!-- Term -->
+            <div class="mb-3">
+                <label class="form-label" for="inputTerm">Term</label>
+                <input class="form-control" id="inputTerm" step="0.01" th:field="${curvePoint.term}" type="number">
+            </div>
+            <!-- Value -->
+            <div class="mb-3">
+                <label class="form-label" for="inputValue">Value</label>
+                <input class="form-control" id="inputValue" step="0.01" th:field="${curvePoint.value}" type="number">
+            </div>
+            <!-- creationDate -->
+            <div class="mb-3">
+                <label class="form-label" for="inputCreationDate">creation Date</label>
+                <input class="form-control" id="inputCreationDate" th:field="${curvePoint.creationDate}"
+                       type="datetime-local">
+            </div>
 
+            <div class="mb-3 d-flex justify-content-center mt-5">
+                <a class="btn btn-danger mr-2" href="#" role="button" style="width: 100px;"
+                   th:href="@{/curvePoint/list}">Cancel</a>
+                <input class="btn btn-primary" style="width: 160px;" type="submit" value="Add CurvePoint">
+            </div>
+
+        </form>
+    </div>
 </div>
+<script>
+    $("#success-alert").fadeToggle(10000);
+    $("#error-alert").fadeToggle(10000);
+</script>
 </body>
 </html>

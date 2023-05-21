@@ -1,27 +1,148 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" 
-	  xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="utf-8"/>
-<title>Home</title>
-<link rel="stylesheet" href="../../css/bootstrap.min.css" >
+    <meta charset="utf-8"/>
+    <title>Home</title>
+    <link href="../../css/bootstrap.min.css" rel="stylesheet">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
 </head>
 <body>
 <div class="container">
 
-	<div class="row">
-		<h2>Add New Trade</h2>
-	</div>
+    <div class="row justify-content-center">
+        <h2 class="mt-5">Add New Trade</h2>
+    </div>
 
-	<div class="row">
-		<form action="#" th:action="@{/trade/validate}" th:object="${trade}" method="post" class="form-horizontal" style="width: 100%">
-			<!--
-			TODO: Create a form to input the values of Trade, there are 2 buttons: Save data and Cancel to the list Trade
-			 -->
+    <div id="success-alert" th:if="${success != null}">
+        <div class="alert alert-success d-flex align-items-center mt-3" role="alert" th:if="${success eq true}">
+            <p th:text="${message}"></p>
+        </div>
+        <div class="alert alert-danger  mt-3" role="alert" th:if="${success eq false}">
+            <p>Les champs suivant sont incorrect : </p>
+            <ul th:each="m: ${messageList}">
+                <li th:text="${m}"></li>
+            </ul>
+        </div>
+    </div>
 
-		</form>
-	</div>
-
+    <div class="row justify-content-center py-5">
+        <form action="#" class="form-horizontal border p-5 my-2" method="post" style="width: 80%"
+              th:action="@{/trade/validate}" th:object="${trade}">
+            <!-- Account -->
+            <div class="mb-3">
+                <label class="form-label" for="inputAccount">Account</label>
+                <input class="form-control" id="inputAccount" th:field="*{account}" type="text">
+            </div>
+            <!-- Type -->
+            <div class="mb-3">
+                <label class="form-label" for="inputType">Type</label>
+                <input class="form-control" id="inputType" th:field="*{type}" type="text">
+            </div>
+            <!-- BuyQuantity -->
+            <div class="mb-3">
+                <label class="form-label" for="inputBuyQuantity">Buy Quantity</label>
+                <input class="form-control" id="inputBuyQuantity" step="0.01" th:field="*{buyQuantity}" type="number">
+            </div>
+            <!-- SellQuantity -->
+            <div class="mb-3">
+                <label class="form-label" for="inputSellQuantity">Sell Quantity</label>
+                <input class="form-control" id="inputSellQuantity" step="0.01" th:field="*{sellQuantity}" type="number">
+            </div>
+            <!-- BuyPrice -->
+            <div class="mb-3">
+                <label class="form-label" for="inputBuyPrice">Buy Price</label>
+                <input class="form-control" id="inputBuyPrice" step="0.01" th:field="*{buyPrice}" type="number">
+            </div>
+            <!-- SellPrice -->
+            <div class="mb-3">
+                <label class="form-label" for="inputSellPrice">Sell Price</label>
+                <input class="form-control" id="inputSellPrice" step="0.01" th:field="*{sellPrice}" type="number">
+            </div>
+            <!-- Benchmark -->
+            <div class="mb-3">
+                <label class="form-label" for="inputBenchmark">Benchmark</label>
+                <input class="form-control" id="inputBenchmark" th:field="*{benchmark}" type="text">
+            </div>
+            <!-- TradeDate -->
+            <div class="mb-3">
+                <label class="form-label" for="inputTradeDate">Trade Date</label>
+                <input class="form-control" id="inputTradeDate" th:field="*{tradeDate}" type="datetime-local">
+            </div>
+            <!-- Security -->
+            <div class="mb-3">
+                <label class="form-label" for="inputSecurity">Security</label>
+                <input class="form-control" id="inputSecurity" th:field="*{security}" type="text">
+            </div>
+            <!-- Status -->
+            <div class="mb-3">
+                <label class="form-label" for="inputStatus">Status</label>
+                <input class="form-control" id="inputStatus" th:field="*{status}" type="text">
+            </div>
+            <!-- Trader -->
+            <div class="mb-3">
+                <label class="form-label" for="inputTrader">Trader</label>
+                <input class="form-control" id="inputTrader" th:field="*{trader}" type="text">
+            </div>
+            <!-- Book -->
+            <div class="mb-3">
+                <label class="form-label" for="inputBook">Book</label>
+                <input class="form-control" id="inputBook" th:field="*{book}" type="text">
+            </div>
+            <!-- CreationName -->
+            <div class="mb-3">
+                <label class="form-label" for="inputCreationName">Creation Name</label>
+                <input class="form-control" id="inputCreationName" th:field="*{creationName}" type="text">
+            </div>
+            <!-- CreationDate -->
+            <div class="mb-3">
+                <label class="form-label" for="inputCreationDate">Creation Date</label>
+                <input class="form-control" id="inputCreationDate" th:field="*{creationDate}" type="datetime-local">
+            </div>
+            <!-- RevisionName -->
+            <div class="mb-3">
+                <label class="form-label" for="inputRevisionName">Revision Name</label>
+                <input class="form-control" id="inputRevisionName" th:field="*{revisionName}" type="text">
+            </div>
+            <!-- RevisionDate -->
+            <div class="mb-3">
+                <label class="form-label" for="inputRevisionDate">Revision Date</label>
+                <input class="form-control" id="inputRevisionDate" th:field="*{revisionDate}" type="datetime-local">
+            </div>
+            <!-- DealName -->
+            <div class="mb-3">
+                <label class="form-label" for="inputDealName">Deal Name</label>
+                <input class="form-control" id="inputDealName" th:field="*{dealName}" type="text">
+            </div>
+            <!-- DealType -->
+            <div class="mb-3">
+                <label class="form-label" for="inputDealType">Deal Type</label>
+                <input class="form-control" id="inputDealType" th:field="*{dealType}" type="text">
+            </div>
+            <!-- SourceListId -->
+            <div class="mb-3">
+                <label class="form-label" for="inputSourceListId">Source ListId</label>
+                <input class="form-control" id="inputSourceListId" th:field="*{sourceListId}" type="text">
+            </div>
+            <!-- Side -->
+            <div class="mb-3">
+                <label class="form-label" for="inputSide">Side</label>
+                <input class="form-control" id="inputSide" th:field="*{side}" type="text">
+            </div>
+            <div class="mb-3 d-flex justify-content-center mt-5">
+                <a class="btn btn-danger mr-2" href="#" role="button" style="width: 100px;" th:href="@{/trade/list}">Cancel</a>
+                <input class="btn btn-primary" style="width: 100px;" type="submit" value="Add Trade">
+            </div>
+        </form>
+    </div>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script crossorigin="anonymous"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script>
+    $("#success-alert").fadeToggle(10000);
+    $("#error-alert").fadeToggle(10000);
+</script>
 </body>
 </html>
