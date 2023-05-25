@@ -13,6 +13,10 @@ import org.springframework.web.servlet.ModelAndView;
 public class LoginController {
     private final IUserService userService;
 
+    /**
+     * Read - Get login page
+     * @return - A ModelAndView, name  of the template
+     */
     @GetMapping("login")
     public ModelAndView login() {
         ModelAndView mav = new ModelAndView();
@@ -20,6 +24,10 @@ public class LoginController {
         return mav;
     }
 
+    /**
+     * Read - Get list of all users
+     * @return - A ModelAndView, name  of the template
+     */
     @GetMapping("secure/article-details")
     public ModelAndView getAllUserArticles() {
         ModelAndView mav = new ModelAndView();
@@ -28,6 +36,10 @@ public class LoginController {
         return mav;
     }
 
+    /**
+     * Read - Get error page
+     * @return - A ModelAndView, name  of the template
+     */
     @GetMapping("error")
     public ModelAndView error() {
         ModelAndView mav = new ModelAndView();

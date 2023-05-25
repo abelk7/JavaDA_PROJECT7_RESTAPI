@@ -24,6 +24,12 @@ public class BidListController {
     private final ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
     private List<String> errorMessageList;
 
+    /**
+     * Read - Get all bidlist
+     * @param model model contain readable values in template
+     * @param httpServletResponse response of request
+     * @return - An String, name  of the template
+     */
     @GetMapping("/bidList/list")
     @ResponseStatus(HttpStatus.OK)
     public String home(Model model, HttpServletResponse httpServletResponse) {
@@ -35,6 +41,13 @@ public class BidListController {
         return "bidList/list";
     }
 
+    /**
+     * Create - Add bidlist
+     * @param bidList bidlist to add
+     * @param model model contain readable values in template
+     * @param httpServletResponse response of request
+     * @return - An String, name  of the template
+     */
     @GetMapping("/bidList/add")
     public String addBidForm(BidList bidList, Model model, HttpServletResponse httpServletResponse) {
         if (model.containsAttribute("success") && model.getAttribute("success").equals(true) && model.containsAttribute("bidList")) {
@@ -46,6 +59,13 @@ public class BidListController {
         return "bidList/add";
     }
 
+    /**
+     * Validation - Validator of bidlist
+     * @param bid bidlist to validate
+     * @param model model contain readable values in template
+     * @param httpServletResponse response of request
+     * @return - An String, name  of the template
+     */
     @PostMapping("/bidList/validate/")
     public String validate(BidList bid, Model model, HttpServletResponse httpServletResponse) {
         errorMessageList = new ArrayList<>();
@@ -70,6 +90,13 @@ public class BidListController {
         return addBidForm(bid, model, httpServletResponse);
     }
 
+    /**
+     * Read - read a bidlist
+     * @param id Id of the bidlist to read
+     * @param model model contain readable values in template
+     * @param httpServletResponse response of request
+     * @return - An String, name  of the template
+     */
     @GetMapping("/bidList/update/{id}")
     @ResponseStatus(HttpStatus.OK)
     public String showUpdateForm(@PathVariable("id") Integer id, Model model, HttpServletResponse httpServletResponse) {
@@ -84,6 +111,14 @@ public class BidListController {
         return home(model, httpServletResponse);
     }
 
+    /**
+     * Update - Update a bidlist
+     * @param id Id of the bidlist to update
+     * @param bid bidlist with new values
+     * @param model model contain readable values in template
+     * @param httpServletResponse response of request
+     * @return - An String, name  of the template
+     */
     @PostMapping("/bidList/update/{id}")
     @ResponseStatus(HttpStatus.OK)
     public String updateBid(@PathVariable("id") Integer id, BidList bid, Model model, HttpServletResponse httpServletResponse) {
@@ -108,6 +143,13 @@ public class BidListController {
         return "bidList/update";
     }
 
+    /**
+     * Delete - Delete a bidlist
+     * @param id Id of the bidlist to delete
+     * @param model model contain readable values in template
+     * @param httpServletResponse response of request
+     * @return - An String, name  of the template
+     */
     @RequestMapping("/bidList/delete/{id}")
     @ResponseStatus(HttpStatus.OK)
     public String deleteBid(@PathVariable("id") Integer id, Model model, HttpServletResponse httpServletResponse) {
@@ -122,6 +164,13 @@ public class BidListController {
         return home(model, httpServletResponse);
     }
 
+    /**
+     * Add values to model
+     * @param model model contain readable values in template
+     * @param success boolean request success(true)/fail(false)
+     * @param message String message success
+     * @param messageList List of message if error occurred
+     */
     private void addModelAttributeBidlist(Model model, boolean success, String message, List<String> messageList) {
         model.addAttribute("success", success);
         model.addAttribute("message", message);

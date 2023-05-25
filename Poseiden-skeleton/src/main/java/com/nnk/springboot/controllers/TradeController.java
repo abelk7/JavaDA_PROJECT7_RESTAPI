@@ -25,6 +25,12 @@ public class TradeController {
     private final ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
     private List<String> errorMessageList;
 
+    /**
+     * Read - Get all trade
+     * @param model model contain readable values in template
+     * @param httpServletResponse response of request
+     * @return - An String, name  of the template
+     */
     @GetMapping("/trade/list")
     public String home(Model model, HttpServletResponse httpServletResponse) {
         model.addAttribute("tradeList", tradeService.findAll());
@@ -35,30 +41,15 @@ public class TradeController {
         return "trade/list";
     }
 
+    /**
+     * Create - Add trade
+     * @param trade trade to add
+     * @param model model contain readable values in template
+     * @param httpServletResponse response of request
+     * @return - An String, name  of the template
+     */
     @GetMapping("/trade/add")
     public String addTradeForm(Trade trade, Model model, HttpServletResponse httpServletResponse) {
-        trade.setTradeId(1);
-        trade.setAccount("accountTestUpdated");
-        trade.setType("typeTestUpdated");
-        trade.setBuyQuantity(15.00);
-        trade.setSellQuantity(20.00);
-        trade.setBuyPrice(40.00);
-        trade.setSellPrice(80.00);
-        trade.setBenchmark("benchmarkTestUpdated");
-        trade.setTradeDate(LocalDateTime.now());
-        trade.setSecurity("securityTestUpdated");
-        trade.setStatus("statusTestUpdated");
-        trade.setTrader("traderTestUpdated");
-        trade.setBook("bookTestUpdated");
-        trade.setCreationName("creationNameTestUpdated");
-        trade.setCreationDate(LocalDateTime.now());
-        trade.setRevisionName("revisionNameTestUpdated");
-        trade.setRevisionDate(LocalDateTime.now());
-        trade.setDealName("dealNameTestUpdated");
-        trade.setDealType("dealTypeTestUpdated");
-        trade.setSourceListId("sourceListIdTestUpdated");
-        trade.setSide("sideTestUpdated");
-
         if (model.containsAttribute("success") && model.getAttribute("success").equals(true) && model.containsAttribute("trade")) {
             httpServletResponse.setStatus(HttpServletResponse.SC_OK);
             return home(model, httpServletResponse);
@@ -68,6 +59,13 @@ public class TradeController {
         return "trade/add";
     }
 
+    /**
+     * Validation - Validator of trade
+     * @param trade trade to validate
+     * @param model model contain readable values in template
+     * @param httpServletResponse response of request
+     * @return - An String, name  of the template
+     */
     @PostMapping("/trade/validate")
     public String validate(Trade trade, Model model, HttpServletResponse httpServletResponse) {
         errorMessageList = new ArrayList<>();
@@ -91,6 +89,13 @@ public class TradeController {
         return addTradeForm(trade, model, httpServletResponse);
     }
 
+    /**
+     * Read - read a trade
+     * @param id Id of the trade to read
+     * @param model model contain readable values in template
+     * @param httpServletResponse response of request
+     * @return - An String, name  of the template
+     */
     @GetMapping("/trade/update/{id}")
     public String showUpdateForm(@PathVariable("id") Integer id, Model model, HttpServletResponse httpServletResponse) {
         Trade trade = tradeService.findById(id);
@@ -103,13 +108,21 @@ public class TradeController {
         return home(model, httpServletResponse);
     }
 
+    /**
+     * Update - Update a trade
+     * @param id Id of the trade to update
+     * @param trade trade with new values
+     * @param model model contain readable values in template
+     * @param httpServletResponse response of request
+     * @return - An String, name  of the template
+     */
     @PostMapping("/trade/update/{id}")
-    public String updateTrade(Trade trade, Model model, HttpServletResponse httpServletResponse) {
+    public String updateTrade(@PathVariable("id") Integer id, Trade trade, Model model, HttpServletResponse httpServletResponse) {
         errorMessageList = new ArrayList<>();
         Validator validator = factory.getValidator();
         Set<ConstraintViolation<Trade>> violations = validator.validate(trade);
 
-        Trade trade1 = tradeService.findById(trade.getTradeId());
+        Trade trade1 = tradeService.findById(id);
 
         if (violations.isEmpty() && trade1 != null) {
             tradeService.save(trade);
@@ -127,6 +140,13 @@ public class TradeController {
         return "trade/update";
     }
 
+    /**
+     * Delete - Delete a trade
+     * @param id Id of the trade to delete
+     * @param model model contain readable values in template
+     * @param httpServletResponse response of request
+     * @return - An String, name  of the template
+     */
     @RequestMapping("/trade/delete/{id}")
     @ResponseStatus(HttpStatus.OK)
     public String deleteTrade(@PathVariable("id") Integer id, Model model, HttpServletResponse httpServletResponse) {
@@ -141,6 +161,13 @@ public class TradeController {
         return home(model, httpServletResponse);
     }
 
+    /**
+     * Add values to model
+     * @param model model contain readable values in template
+     * @param success boolean request success(true)/fail(false)
+     * @param message String message success
+     * @param messageList List of message if error occurred
+     */
     private void addModelAttributeTrade(Model model, boolean success, String message, List<String> messageList) {
         model.addAttribute("success", success);
         model.addAttribute("message", message);

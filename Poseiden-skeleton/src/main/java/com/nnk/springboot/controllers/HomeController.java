@@ -14,16 +14,33 @@ import javax.servlet.http.HttpServletResponse;
 
 @Controller
 public class HomeController {
+
+    /**
+     * Read - Get home page
+     * @param model model contain readable values in template
+     * @return - An String, name  of the template
+     */
     @GetMapping("/")
     public String home(Model model) {
         return "home";
     }
 
+    /**
+     * Read - Get admin home page
+     * @param model model contain readable values in template
+     * @return - An String, name  of the template
+     */
     @GetMapping("/admin/home")
     public String adminHome(Model model) {
         return "redirect:/bidList/list";
     }
 
+    /**
+     * Logout a user logged
+     * @param request
+     * @param response
+     * @return - An String, name  of the template
+     */
     @PostMapping("/app-logout")
     public String logout(HttpServletRequest request, HttpServletResponse response) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();

@@ -24,6 +24,12 @@ public class UserController {
     private final ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
     private List<String> errorMessageList;
 
+    /**
+     * Read - Get all user
+     * @param model model contain readable values in template
+     * @param httpServletResponse response of request
+     * @return - An String, name  of the template
+     */
     @GetMapping("/user/list")
     public String home(Model model, HttpServletResponse httpServletResponse) {
         model.addAttribute("users", userService.findAll());
@@ -34,6 +40,13 @@ public class UserController {
         return "user/list";
     }
 
+    /**
+     * Create - Add user
+     * @param user user to add
+     * @param model model contain readable values in template
+     * @param httpServletResponse response of request
+     * @return - An String, name  of the template
+     */
     @GetMapping("/user/add")
     public String addUser(User user, Model model, HttpServletResponse httpServletResponse) {
 
@@ -45,6 +58,13 @@ public class UserController {
         return "user/add";
     }
 
+    /**
+     * Validation - Validator of user
+     * @param user user to validate
+     * @param model model contain readable values in template
+     * @param httpServletResponse response of request
+     * @return - An String, name  of the template
+     */
     @PostMapping("/user/validate")
     public String validate(User user, Model model, HttpServletResponse httpServletResponse) {
         errorMessageList = new ArrayList<>();
@@ -69,14 +89,14 @@ public class UserController {
         addModelAttributeUser(model, false, null, errorMessageList);
         return addUser(user, model, httpServletResponse);
     }
-    private void addModelAttributeUser(Model model, boolean success, String message, List<String> messageList) {
-        model.addAttribute("success", success);
-        model.addAttribute("message", message);
-        if (messageList != null && !messageList.isEmpty()) {
-            model.addAttribute("messageList", messageList);
-        }
-    }
 
+    /**
+     * Read - read a user
+     * @param id Id of the user to read
+     * @param model model contain readable values in template
+     * @param httpServletResponse response of request
+     * @return - An String, name  of the template
+     */
     @GetMapping("/user/update/{id}")
     @ResponseStatus(HttpStatus.OK)
     public String showUpdateForm(@PathVariable("id") Integer id, Model model, HttpServletResponse httpServletResponse) {
@@ -92,8 +112,16 @@ public class UserController {
         return home(model, httpServletResponse);
     }
 
+    /**
+     * Update - Update a user
+     * @param id Id of the user to update
+     * @param user user with new values
+     * @param model model contain readable values in template
+     * @param httpServletResponse response of request
+     * @return - An String, name  of the template
+     */
     @PostMapping("/user/update/{id}")
-    public String updateUser(User user, Model model, HttpServletResponse httpServletResponse) {
+    public String updateUser(@PathVariable("id") Integer id, User user, Model model, HttpServletResponse httpServletResponse) {
 
         errorMessageList = new ArrayList<>();
         Validator validator = factory.getValidator();
@@ -120,6 +148,13 @@ public class UserController {
         return "user/update";
     }
 
+    /**
+     * Delete - Delete a user
+     * @param id Id of the user to delete
+     * @param model model contain readable values in template
+     * @param httpServletResponse response of request
+     * @return - An String, name  of the template
+     */
     @RequestMapping("/user/delete/{id}")
     @ResponseStatus(HttpStatus.OK)
     public String deleteUser(@PathVariable("id") Integer id, Model model, HttpServletResponse httpServletResponse) {
@@ -133,5 +168,20 @@ public class UserController {
         errorMessageList.add("Une erreur est survenue lors de la suppression du User");
         addModelAttributeUser(model, false, null, errorMessageList);
         return home(model, httpServletResponse);
+    }
+
+    /**
+     * Add values to model
+     * @param model model contain readable values in template
+     * @param success boolean request success(true)/fail(false)
+     * @param message String message success
+     * @param messageList List of message if error occurred
+     */
+    private void addModelAttributeUser(Model model, boolean success, String message, List<String> messageList) {
+        model.addAttribute("success", success);
+        model.addAttribute("message", message);
+        if (messageList != null && !messageList.isEmpty()) {
+            model.addAttribute("messageList", messageList);
+        }
     }
 }
