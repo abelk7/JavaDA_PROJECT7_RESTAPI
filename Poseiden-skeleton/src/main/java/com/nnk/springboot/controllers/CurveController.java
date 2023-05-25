@@ -24,6 +24,12 @@ public class CurveController {
     private final ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
     private List<String> errorMessageList;
 
+    /**
+     * Read - Get all curvePoint
+     * @param model model contain readable values in template
+     * @param httpServletResponse response of request
+     * @return - An String, name  of the template
+     */
     @GetMapping("/curvePoint/list")
     public String home(Model model, HttpServletResponse httpServletResponse) {
         model.addAttribute("curvPointList", curvePointService.findAll());
@@ -34,6 +40,13 @@ public class CurveController {
         return "curvePoint/list";
     }
 
+    /**
+     * Create - Add curvePoint
+     * @param curvePoint curvePoint to add
+     * @param model model contain readable values in template
+     * @param httpServletResponse response of request
+     * @return - An String, name  of the template
+     */
     @GetMapping("/curvePoint/add")
     public String addCurvePointForm(CurvePoint curvePoint, Model model, HttpServletResponse httpServletResponse) {
         if (model.containsAttribute("success") && model.getAttribute("success").equals(true) && model.containsAttribute("curvePoint")) {
@@ -45,6 +58,13 @@ public class CurveController {
         return "curvePoint/add";
     }
 
+    /**
+     * Validation - Validator of curvePoint
+     * @param curvePoint curvePoint to validate
+     * @param model model contain readable values in template
+     * @param httpServletResponse response of request
+     * @return - An String, name  of the template
+     */
     @PostMapping("/curvePoint/validate")
     public String validate(CurvePoint curvePoint, Model model, HttpServletResponse httpServletResponse) {
         errorMessageList = new ArrayList<>();
@@ -68,6 +88,13 @@ public class CurveController {
         return addCurvePointForm(curvePoint, model, httpServletResponse);
     }
 
+    /**
+     * Read - read a curvePoint
+     * @param id Id of the curvePoint to read
+     * @param model model contain readable values in template
+     * @param httpServletResponse response of request
+     * @return - An String, name  of the template
+     */
     @GetMapping("/curvePoint/update/{id}")
     @ResponseStatus(HttpStatus.OK)
     public String showUpdateForm(@PathVariable("id") Integer id, Model model, HttpServletResponse httpServletResponse) {
@@ -82,6 +109,14 @@ public class CurveController {
         return home(model, httpServletResponse);
     }
 
+    /**
+     * Update - Update a curvePoint
+     * @param id Id of the curvePoint to update
+     * @param curvePoint curvePoint with new values
+     * @param model model contain readable values in template
+     * @param httpServletResponse response of request
+     * @return - An String, name  of the template
+     */
     @PostMapping("/curvePoint/update/{id}")
     @ResponseStatus(HttpStatus.OK)
     public String updateCurvePoint(@PathVariable("id") Integer id, CurvePoint curvePoint, Model model, HttpServletResponse httpServletResponse) {
@@ -106,6 +141,13 @@ public class CurveController {
         return "curvePoint/update";
     }
 
+    /**
+     * Delete - Delete a curvePoint
+     * @param id Id of the curvePoint to delete
+     * @param model model contain readable values in template
+     * @param httpServletResponse response of request
+     * @return - An String, name  of the template
+     */
     @RequestMapping("/curvePoint/delete/{id}")
     @ResponseStatus(HttpStatus.OK)
     public String deleteBid(@PathVariable("id") Integer id, Model model, HttpServletResponse httpServletResponse) {
@@ -120,6 +162,13 @@ public class CurveController {
         return home(model, httpServletResponse);
     }
 
+    /**
+     * Add values to model
+     * @param model model contain readable values in template
+     * @param success boolean request success(true)/fail(false)
+     * @param message String message success
+     * @param messageList List of message if error occurred
+     */
     private void addModelAttributeCurvePoint(Model model, boolean success, String message, List<String> messageList) {
         model.addAttribute("success", success);
         model.addAttribute("message", message);

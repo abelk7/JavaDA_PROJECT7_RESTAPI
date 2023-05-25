@@ -24,6 +24,12 @@ public class RuleNameController {
     private final ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
     private List<String> errorMessageList;
 
+    /**
+     * Read - Get all ruleName
+     * @param model model contain readable values in template
+     * @param httpServletResponse response of request
+     * @return - An String, name  of the template
+     */
     @GetMapping("/ruleName/list")
     public String home(Model model, HttpServletResponse httpServletResponse) {
         model.addAttribute("ruleNameList", ruleNameService.findAll());
@@ -34,6 +40,13 @@ public class RuleNameController {
         return "ruleName/list";
     }
 
+    /**
+     * Create - Add ruleName
+     * @param ruleName ruleName to add
+     * @param model model contain readable values in template
+     * @param httpServletResponse response of request
+     * @return - An String, name  of the template
+     */
     @GetMapping("/ruleName/add")
     public String addRuleForm(RuleName ruleName, Model model, HttpServletResponse httpServletResponse) {
         if (model.containsAttribute("success") && model.getAttribute("success").equals(true) && model.containsAttribute("ruleName")) {
@@ -45,6 +58,13 @@ public class RuleNameController {
         return "ruleName/add";
     }
 
+    /**
+     * Validation - Validator of ruleName
+     * @param ruleName ruleName to validate
+     * @param model model contain readable values in template
+     * @param httpServletResponse response of request
+     * @return - An String, name  of the template
+     */
     @PostMapping("/ruleName/validate")
     public String validate(RuleName ruleName, Model model, HttpServletResponse httpServletResponse) {
         errorMessageList = new ArrayList<>();
@@ -68,6 +88,13 @@ public class RuleNameController {
         return addRuleForm(ruleName, model, httpServletResponse);
     }
 
+    /**
+     * Read - read a ruleName
+     * @param id Id of the ruleName to read
+     * @param model model contain readable values in template
+     * @param httpServletResponse response of request
+     * @return - An String, name  of the template
+     */
     @GetMapping("/ruleName/update/{id}")
     @ResponseStatus(HttpStatus.OK)
     public String showUpdateForm(@PathVariable("id") Integer id, Model model, HttpServletResponse httpServletResponse) {
@@ -81,14 +108,22 @@ public class RuleNameController {
         return home(model, httpServletResponse);
     }
 
+    /**
+     * Update - Update a ruleName
+     * @param id Id of the ruleName to update
+     * @param ruleName ruleName with new values
+     * @param model model contain readable values in template
+     * @param httpServletResponse response of request
+     * @return - An String, name  of the template
+     */
     @PostMapping("/ruleName/update/{id}")
-    public String updateRuleName(RuleName ruleName, Model model, HttpServletResponse httpServletResponse) {
+    public String updateRuleName(@PathVariable("id") Integer id, RuleName ruleName, Model model, HttpServletResponse httpServletResponse) {
 
         errorMessageList = new ArrayList<>();
         Validator validator = factory.getValidator();
         Set<ConstraintViolation<RuleName>> violations = validator.validate(ruleName);
 
-        RuleName ruleName1 = ruleNameService.findById(ruleName.getId());
+        RuleName ruleName1 = ruleNameService.findById(id);
 
         if (violations.isEmpty() && ruleName1 != null) {
             ruleNameService.save(ruleName);
@@ -106,6 +141,13 @@ public class RuleNameController {
         return "ruleName/update";
     }
 
+    /**
+     * Delete - Delete a ruleName
+     * @param id Id of the ruleName to delete
+     * @param model model contain readable values in template
+     * @param httpServletResponse response of request
+     * @return - An String, name  of the template
+     */
     @RequestMapping("/ruleName/delete/{id}")
     @ResponseStatus(HttpStatus.OK)
     public String deleteRuleName(@PathVariable("id") Integer id, Model model, HttpServletResponse httpServletResponse) {
@@ -120,6 +162,13 @@ public class RuleNameController {
         return home(model, httpServletResponse);
     }
 
+    /**
+     * Add values to model
+     * @param model model contain readable values in template
+     * @param success boolean request success(true)/fail(false)
+     * @param message String message success
+     * @param messageList List of message if error occurred
+     */
     private void addModelAttributeRuleName(Model model, boolean success, String message, List<String> messageList) {
         model.addAttribute("success", success);
         model.addAttribute("message", message);

@@ -24,6 +24,12 @@ public class RatingController {
     private final ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
     private List<String> errorMessageList;
 
+    /**
+     * Read - Get all rating
+     * @param model model contain readable values in template
+     * @param httpServletResponse response of request
+     * @return - An String, name  of the template
+     */
     @GetMapping("/rating/list")
     public String home(Model model, HttpServletResponse httpServletResponse) {
         model.addAttribute("ratingList", ratingService.findAll());
@@ -34,6 +40,13 @@ public class RatingController {
         return "rating/list";
     }
 
+    /**
+     * Create - Add rating
+     * @param rating rating to add
+     * @param model model contain readable values in template
+     * @param httpServletResponse response of request
+     * @return - An String, name  of the template
+     */
     @GetMapping("/rating/add")
     public String addRatingForm(Rating rating, Model model, HttpServletResponse httpServletResponse) {
         if (model.containsAttribute("success") && model.getAttribute("success").equals(true) && model.containsAttribute("rating")) {
@@ -45,19 +58,13 @@ public class RatingController {
         return "rating/add";
     }
 
-    @GetMapping("/rating/update/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public String showUpdateForm(@PathVariable("id") Integer id, Model model, HttpServletResponse httpServletResponse) {
-        Rating rating = ratingService.findById(id);
-        if (rating != null) {
-            model.addAttribute("rating", rating);
-            model.addAttribute("success", true);
-            return "rating/update";
-        }
-        addModelAttributeRating(model, false, "Aucun Rating n'a été trouvé avec l'id fourni", null);
-        return home(model, httpServletResponse);
-    }
-
+    /**
+     * Validation - Validator of rating
+     * @param rating rating to validate
+     * @param model model contain readable values in template
+     * @param httpServletResponse response of request
+     * @return - An String, name  of the template
+     */
     @PostMapping("/rating/validate")
     public String validate(Rating rating, Model model, HttpServletResponse httpServletResponse) {
         errorMessageList = new ArrayList<>();
@@ -81,14 +88,42 @@ public class RatingController {
         return addRatingForm(rating, model, httpServletResponse);
     }
 
+    /**
+     * Read - read a rating
+     * @param id Id of the rating to read
+     * @param model model contain readable values in template
+     * @param httpServletResponse response of request
+     * @return - An String, name  of the template
+     */
+    @GetMapping("/rating/update/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public String showUpdateForm(@PathVariable("id") Integer id, Model model, HttpServletResponse httpServletResponse) {
+        Rating rating = ratingService.findById(id);
+        if (rating != null) {
+            model.addAttribute("rating", rating);
+            model.addAttribute("success", true);
+            return "rating/update";
+        }
+        addModelAttributeRating(model, false, "Aucun Rating n'a été trouvé avec l'id fourni", null);
+        return home(model, httpServletResponse);
+    }
+
+    /**
+     * Update - Update a rating
+     * @param id Id of the rating to update
+     * @param rating rating with new values
+     * @param model model contain readable values in template
+     * @param httpServletResponse response of request
+     * @return - An String, name  of the template
+     */
     @PostMapping("/rating/update/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public String updateRating(Rating rating, Model model, HttpServletResponse httpServletResponse) {
+    public String updateRating(@PathVariable("id") Integer id, Rating rating, Model model, HttpServletResponse httpServletResponse) {
         errorMessageList = new ArrayList<>();
         Validator validator = factory.getValidator();
         Set<ConstraintViolation<Rating>> violations = validator.validate(rating);
 
-        Rating rating1 = ratingService.findById(rating.getId());
+        Rating rating1 = ratingService.findById(id);
 
         if (violations.isEmpty() && rating1 != null) {
             ratingService.save(rating);
@@ -105,6 +140,13 @@ public class RatingController {
         return "rating/update";
     }
 
+    /**
+     * Delete - Delete a rating
+     * @param id Id of the rating to delete
+     * @param model model contain readable values in template
+     * @param httpServletResponse response of request
+     * @return - An String, name  of the template
+     */
     @RequestMapping("/rating/delete/{id}")
     @ResponseStatus(HttpStatus.OK)
     public String deleteRating(@PathVariable("id") Integer id, Model model, HttpServletResponse httpServletResponse) {
@@ -119,6 +161,13 @@ public class RatingController {
         return home(model, httpServletResponse);
     }
 
+    /**
+     * Add values to model
+     * @param model model contain readable values in template
+     * @param success boolean request success(true)/fail(false)
+     * @param message String message success
+     * @param messageList List of message if error occurred
+     */
     private void addModelAttributeRating(Model model, boolean success, String message, List<String> messageList) {
         model.addAttribute("success", success);
         model.addAttribute("message", message);
