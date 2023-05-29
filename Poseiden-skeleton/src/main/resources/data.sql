@@ -64,5 +64,5 @@ values (null,'Account1','Benchmark1','Book1',5.7,8.5,'SqlPart1','SqlStr1','Templ
 
 -- INSERT users
 INSERT INTO users (id,fullname,password,role,username)
-values (null, 'Abel Kiss', '$2y$10$nsJaBoL3eKyQyyPDdLQOke3BrbEPoHgBRBrbzszUtWXlZVz03Uw32', 'USER', 'abel'),
+values (null, 'Abel Kiss', '$2y$10$nsJaBoL3eKyQyyPDdLQOke3BrbEPoHgBRBrbzszUtWXlZVz03Uw32', 'ADMIN', 'abel'),
        (null, 'Unknown Unknown', '$2y$10$88ct8lPEf2bymXwN5NzGferDjsTG89jWA6UyQL8iLhVKShFCaKYMC', 'USER', 'test');

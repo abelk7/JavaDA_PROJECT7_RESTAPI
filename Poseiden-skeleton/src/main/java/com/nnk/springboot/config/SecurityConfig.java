@@ -34,7 +34,7 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests((requests) -> requests
                         .antMatchers("/", "/home").permitAll()
-                        .antMatchers("/user/list/**", "/user/add/**", "/user/validate/**" , "/user/update/**", "/user/delete/**", "/user/add").permitAll()
+                        .antMatchers("/user/list/**", "/user/add/**", "/user/validate/**" , "/user/update/**", "/user/delete/**", "/user/add").hasRole("ADMIN")
                         .antMatchers(staticResources).permitAll()
                         .anyRequest().authenticated()
                 )

@@ -86,7 +86,6 @@ public class BidListController {
 
         model.addAttribute("bid", bid);
         addModelAttributeBidlist(model, false, null, errorMessageList);
-        httpServletResponse.setStatus(HttpServletResponse.SC_OK);
         return addBidForm(bid, model, httpServletResponse);
     }
 
