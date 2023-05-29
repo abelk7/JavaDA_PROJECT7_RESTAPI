@@ -28,112 +28,112 @@
 
     <div class="row justify-content-center py-5">
         <form action="#" class="form-horizontal border p-5 my-2" method="post" style="width: 80%"
-              th:action="@{/bidList/validate/}" th:object="${bid}">
+              th:action="@{/bidList/validate/}" th:object="${bidList}">
             <!-- Account -->
             <div class="mb-3">
                 <label class="form-label" for="inputAccount">Account</label>
-                <input class="form-control" field="*{account}" id="inputAccount" type="text">
+                <input class="form-control" th:field="*{account}" id="inputAccount" type="text">
             </div>
             <!-- Type -->
             <div class="mb-3">
                 <label class="form-label" for="inputType">Type</label>
-                <input class="form-control" field="*{type}" id="inputType" type="text">
+                <input class="form-control" th:field="*{type}" id="inputType" type="text">
             </div>
             <!-- BidQuantity -->
             <div class="mb-3">
                 <label class="form-label" for="inputBidQuantity">Bid Quantity</label>
-                <input class="form-control" field="*{bidQuantity}" id="inputBidQuantity" step="0.01" type="number">
+                <input class="form-control" th:field="*{bidQuantity}" id="inputBidQuantity" step="0.01" type="number">
             </div>
             <!-- askQuantity -->
             <div class="mb-3">
                 <label class="form-label" for="inputAskQuantity">Ask Quantity</label>
-                <input class="form-control" field="*{askQuantity}" id="inputAskQuantity" step="0.01" type="number">
+                <input class="form-control" th:field="*{askQuantity}" id="inputAskQuantity" step="0.01" type="number">
             </div>
             <!-- bid -->
             <div class="mb-3">
                 <label class="form-label" for="inputBid">Bid</label>
-                <input class="form-control" field="*{bid}" id="inputBid" step="0.01" type="number">
+                <input class="form-control" th:field="*{bid}" id="inputBid" step="0.01" type="number">
             </div>
             <!-- ask -->
             <div class="mb-3">
                 <label class="form-label" for="inputAsk">Ask</label>
-                <input class="form-control" field="*{ask}" id="inputAsk" step="0.01" type="number">
+                <input class="form-control" th:field="*{ask}" id="inputAsk" step="0.01" type="number">
             </div>
             <!-- benchmark -->
             <div class="mb-3">
                 <label class="form-label" for="inputBenchmark">Benchmark</label>
-                <input class="form-control" field="*{benchmark}" id="inputBenchmark" type="text">
+                <input class="form-control" th:field="*{benchmark}" id="inputBenchmark" type="text">
             </div>
             <!-- bidListDate -->
             <div class="mb-3">
                 <label class="form-label" for="inputBidListDate">BidList Date</label>
-                <input class="form-control" field="${bidList.bidListDate}" id="inputBidListDate" type="datetime-local">
+                <input class="form-control" th:field="*{bidListDate}" id="inputBidListDate" type="datetime-local">
             </div>
             <!-- commentary -->
             <div class="mb-3">
                 <label class="form-label" for="inputCommentary">Commentary</label>
-                <input class="form-control" field="*{commentary}" id="inputCommentary" type="text">
+                <input class="form-control" th:field="*{commentary}" id="inputCommentary" type="text">
             </div>
             <!-- security -->
             <div class="mb-3">
                 <label class="form-label" for="inputSecurity">Security</label>
-                <input class="form-control" field="*{security}" id="inputSecurity" type="text">
+                <input class="form-control" th:field="*{security}" id="inputSecurity" type="text">
             </div>
             <!-- status -->
             <div class="mb-3">
                 <label class="form-label" for="inputStatus">Status</label>
-                <input class="form-control" field="*{status}" id="inputStatus" type="text">
+                <input class="form-control" th:field="*{status}" id="inputStatus" type="text">
             </div>
             <!-- trader -->
             <div class="mb-3">
                 <label class="form-label" for="inputTrader">Trader</label>
-                <input class="form-control" field="*{trader}" id="inputTrader" type="text">
+                <input class="form-control" th:field="*{trader}" id="inputTrader" type="text">
             </div>
             <!-- book -->
             <div class="mb-3">
                 <label class="form-label" for="inputBook">Book</label>
-                <input class="form-control" field="*{book}" id="inputBook" type="text">
+                <input class="form-control" th:field="*{book}" id="inputBook" type="text">
             </div>
             <!-- creationName -->
             <div class="mb-3">
                 <label class="form-label" for="inputCreationName">Creation Name</label>
-                <input class="form-control" field="*{creationName}" id="inputCreationName" type="text">
+                <input class="form-control" th:field="*{creationName}" id="inputCreationName" type="text">
 
             </div>
             <!-- creationDate -->
             <div class="mb-3">
                 <label class="form-label" for="inputCreationDate">creation Date</label>
-                <input class="form-control" field="*{creationDate}" id="inputCreationDate" type="datetime-local">
+                <input class="form-control" th:field="*{creationDate}" id="inputCreationDate" type="datetime-local">
             </div>
             <!-- revisionName -->
             <div class="mb-3">
                 <label class="form-label" for="inputRevisionName">Revision Name</label>
-                <input class="form-control" field="*{revisionName}" id="inputRevisionName" type="text">
+                <input class="form-control" th:field="*{revisionName}" id="inputRevisionName" type="text">
             </div>
             <!-- revisionDate -->
             <div class="mb-3">
                 <label class="form-label" for="inputRevisionDate">Revision Date</label>
-                <input class="form-control" field="*{revisionDate}" id="inputRevisionDate" type="datetime-local">
+                <input class="form-control" th:field="*{revisionDate}" id="inputRevisionDate" type="datetime-local">
             </div>
             <!-- dealName -->
             <div class="mb-3">
                 <label class="form-label" for="inputDealName">dealName</label>
-                <input class="form-control" field="*{dealName}" id="inputDealName" type="text">
+                <input class="form-control" th:field="*{dealName}" id="inputDealName" type="text">
             </div>
             <!-- dealType -->
             <div class="mb-3">
                 <label class="form-label" for="inputDealType">Deal Type</label>
-                <input class="form-control" field="*{dealType}" id="inputDealType" type="text">
+                <input class="form-control" th:field="*{dealType}" id="inputDealType" type="text">
             </div>
             <!-- sourceListId -->
             <div class="mb-3">
                 <label class="form-label" for="inputSourceListId">Source ListId</label>
-                <input class="form-control" field="*{sourceListId}" id="inputSourceListId" type="text">
+                <input class="form-control" th:field="*{sourceListId}" id="inputSourceListId" type="text">
             </div>
             <!-- side -->
             <div class="mb-3">
                 <label class="form-label" for="inputSide">Side</label>
-                <input class="form-control" field="*{side}" id="inputSide" type="text">
+                <input class="form-control" th:field="*{side}" id="inputSide" type="text">
             </div>
             <div class="mb-3 d-flex justify-content-center mt-5">
                 <a class="btn btn-danger mr-2" href="#" role="button" style="width: 100px;" th:href="@{/bidList/list}">Cancel</a>

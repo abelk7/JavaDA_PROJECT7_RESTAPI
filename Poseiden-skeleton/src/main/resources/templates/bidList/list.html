@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8"/>
     <title>Home</title>
@@ -18,6 +19,9 @@
             <a href="/ruleName/list">Rule</a>
         </div>
         <div class="col-6 text-right">
+            <div>
+                <a class="btn btn-primary btn-sm my-2" sec:authorize="hasRole('ADMIN')" th:href="@{/user/list}">User management</a>
+            </div>
             Logged in user: <b class="user" th:inline="text"> [[${#httpServletRequest.remoteUser}]] </b>
             <form method="POST" th:action="@{/app-logout}">
                 <input class="btn btn-warning btn-sm" type="submit" value="Logout"/>
@@ -62,10 +66,27 @@
                               style="display: inline; margin-right: 5px;" th:action="@{'/bidList/update/'+${bid.getBidListId()}}">
                             <button class="btn btn-primary" type="submit">Edit</button>
                         </form>
-                        <form action="#" class="form" method="delete"
-                              style="display: inline;" th:action="@{'/bidList/delete/'+${bid.getBidListId()}}">
-                            <button class="btn btn-danger" type="submit">Delete</button>
+                        <form action="#" class="form">
+                            <button class="btn btn-danger" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">Delete</button>
                         </form>
+                        <!-- Modal -->
+                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-body">
+                                        Êtes-vous sûr de vouloir supprimer ?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        <form action="#" class="form" method="delete"
+                                              style="display: inline;" th:action="@{'/bidList/delete/'+${bid.getBidListId()}}">
+                                            <button class="btn btn-danger" type="submit">
+                                                Confirm</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                 </td>
@@ -78,6 +99,7 @@
 <script crossorigin="anonymous"
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
 <script>
     $("#success-alert").fadeToggle(10000);
     $("#error-alert").fadeToggle(10000);

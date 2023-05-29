@@ -35,6 +35,8 @@
         <maven-project-info-reports-plugin.version>3.4.2</maven-project-info-reports-plugin.version>
         <maven-site-plugin.version>3.7.1</maven-site-plugin.version>
         <validation-api.version>2.0.1.Final</validation-api.version>
+        <hibernate-validator.version>6.2.5.Final</hibernate-validator.version>
+        <passay.version>1.6.2</passay.version>
     </properties>
 
     <dependencies>
@@ -150,8 +152,18 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator-annotation-processor</artifactId>
-            <version>6.2.5.Final</version>
+            <version>${hibernate-validator.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.passay</groupId>
+            <artifactId>passay</artifactId>
+            <version>${passay.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.thymeleaf.extras</groupId>
+            <artifactId>thymeleaf-extras-springsecurity5</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>
